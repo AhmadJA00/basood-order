@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blue-sky: #e2f4ff;
+  --color-blue-sky-varint: #f5fbff;
+
+  --color-primary-light: #005683;
+  --color-primary: #003049;
+  --color-primary-dark: #001a29;
+
+  ---color-danger-light: #790000;
+  ---color-danger: #c1111f;
+  ---color-danger-dark: #630101;
+
+  /* Danger */
+  --danger: "#b91c1c";
+  --color-danger: "#b91c1c";
+  --danger-hover: "#991717";
+  --color-danger-hover: "#991717";
+  --danger-active: "#7a1212";
+  --color-danger-active: "#7a1212";
+  --danger-text: "#b91c1c";
+  --color-danger-text: "#b91c1c";
+  --danger-text-hover: "#991717";
+  --color-danger-text-hover: "#991717";
+  --danger-text-active: "#7a1212";
+  --color-danger-text-active: "#7a1212";
+}
+
+.ant-form-item {
+  margin: 0px !important;
+}
