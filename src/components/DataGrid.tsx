@@ -1,53 +1,63 @@
-import { Table, TableProps } from "antd";
-import Loading from "./Loading";
+import { Table, type TableProps } from "antd";
 import React from "react";
+import Loading from "./Loading";
+import { useSearchParams } from "react-router";
 import HeaderTable from "./HeaderTable";
 
-type DataGridProps = {
-  columns: any[];
+type DataGridProps<T> = {
+  columns: {
+    title: string;
+    key: string;
+    dataIndex: string;
+    sorter: boolean;
+    render: (row: T) => string | React.ReactNode;
+  }[];
   title: string;
   hasCreate?: boolean;
-  dataSource: any[];
+  data: {
+    items: T[];
+    total: number;
+  };
   loading: boolean;
   className?: string;
-  // Server-side props
-  total: number; // Total number of items on the server
-  onPageChange: (page: number, pageSize: number) => void;
-  onSortChange?: (
-    sortField: string,
-    sortOrder: "ascend" | "descend" | null
-  ) => void;
-  currentPage: number; // Receive current page from parent
-  pageSize: number; // Receive page size from parent
 };
 
-const DataGrid: React.FC<DataGridProps> = ({
+const DataGrid = <T,>({
   columns,
   title,
   hasCreate = true,
-  dataSource,
+  data,
   loading,
   className,
-  total,
-  onPageChange,
-  onSortChange,
-  currentPage,
-  pageSize,
-}) => {
-  // Configure columns for server-side sorting
-  const sortedColumns = columns.map((col) => {
-    if (col.sorter) {
-      return {
-        ...col,
-        // Add sorter configuration and onChange handler
-        sorter: true,
-        sortOrder: col.dataIndex ? undefined : undefined, // You might want to track active sort
-      };
-    }
-    return col;
-  });
+}: DataGridProps<T>) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get("currentPage")) || 1;
+  const pageSize = Number(searchParams.get("pageSize")) || 10;
 
-  const handleTableChange: TableProps<any>["onChange"] = (
+  const onSortChange = (
+    sortField: string,
+    sortOrder: "ascend" | "descend" | null
+  ) => {
+    if (sortOrder) {
+      searchParams.set("currentOrderBy", sortField);
+      searchParams.set(
+        "isAscending",
+        sortOrder === "ascend" ? "true" : "false"
+      );
+    } else {
+      searchParams.delete("currentOrderBy");
+      searchParams.delete("isAscending");
+    }
+    setSearchParams(searchParams);
+  };
+
+  const onPageChange = (page: number, newPageSize: number) => {
+    searchParams.set("currentPage", String(page));
+    searchParams.set("pageSize", String(newPageSize));
+    setSearchParams(searchParams);
+  };
+
+  const handleTableChange: TableProps<T>["onChange"] = (
     pagination,
     filters,
     sorter
@@ -60,32 +70,41 @@ const DataGrid: React.FC<DataGridProps> = ({
       onPageChange(pagination.current || 1, pagination.pageSize || 10);
     }
 
-    // Handle sorting
-    if (onSortChange && sorter && !Array.isArray(sorter)) {
-      const { field, order } = sorter;
-      onSortChange(field as string, order);
+    if (sorter && !Array.isArray(sorter)) {
+      const { columnKey, order } = sorter;
+      onSortChange(columnKey as string, order);
     }
   };
 
   const pagination = {
     current: currentPage,
     pageSize: pageSize,
-    total: total,
+    total: data.total,
     showSizeChanger: true,
     showTotal: (total: number) => `Total ${total} items`,
   };
 
   return (
-    <div className={className}>
-      <Loading isLoading={loading} />{" "}
-      <HeaderTable title={title} columns={columns} hasCreate={hasCreate} />
-      <Table
-        dataSource={dataSource}
-        columns={sortedColumns}
-        pagination={pagination}
-        onChange={handleTableChange}
-        loading={loading}
-      />
+    <div className={`relative ${className}`}>
+      <p className="text-3xl py-2 text-center">{title}</p>
+      <div className="relative">
+        <Loading isLoading={loading} />
+        <HeaderTable hasCreate={hasCreate} />
+        <Table
+          dataSource={data.items}
+          columns={[
+            {
+              title: "id",
+              key: "id",
+              dataIndex: "id",
+              sorter: true,
+            },
+            ...columns,
+          ]}
+          pagination={pagination}
+          onChange={handleTableChange}
+        />
+      </div>
     </div>
   );
 };

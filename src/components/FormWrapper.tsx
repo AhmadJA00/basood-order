@@ -1,9 +1,12 @@
 import React from "react";
-import { Card, Form, type FormProps } from "antd"; // ✅ Import from 'antd'
+import { Button, Card, Form, type FormProps } from "antd"; // ✅ Import from 'antd'
 import Loading from "./Loading";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
 
 type FormWrapperProps<FieldType = any> = {
   form: FormProps<FieldType>["form"];
+  title: string;
   children: React.ReactNode;
   onFinish: FormProps<FieldType>["onFinish"];
   onFinishFailed?: FormProps<FieldType>["onFinishFailed"];
@@ -15,6 +18,7 @@ type FormWrapperProps<FieldType = any> = {
 
 const FormWrapper = <FieldType extends {} = any>({
   form,
+  title,
   children,
   onFinish,
   onFinishFailed,
@@ -23,10 +27,12 @@ const FormWrapper = <FieldType extends {} = any>({
   className = "",
   columns = 3,
 }: FormWrapperProps<FieldType>) => {
+  const { t } = useTranslation();
+  const { id } = useParams();
   return (
     <Card className="relative">
+      <p className="text-3xl py-2 text-center">{title}</p>
       <Loading isLoading={isLoading || false} />
-
       <Form<FieldType>
         form={form}
         name="basic"
@@ -39,6 +45,9 @@ const FormWrapper = <FieldType extends {} = any>({
         initialValues={initialValues}
       >
         {children}
+        <Button type="primary" htmlType="submit" loading={isLoading} block>
+          {isLoading ? t("processing") : id ? t("update") : t("submit")}
+        </Button>
       </Form>
     </Card>
   );

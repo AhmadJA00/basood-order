@@ -1,5 +1,5 @@
 import React from "react";
-import { type UserData, type UserSeation } from "../type";
+import { type UserData, type UserSeation } from "../gloabal.type";
 import { HTTP } from "../axios";
 import helpers from "../helpers";
 import AuthContext from "../context/AuthContext";
@@ -23,9 +23,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       ? false
       : !!helpers.getCookie("token")
   );
-  console.log(currentUser);
-  console.log(userSeation);
-  console.log(userLoggedIn);
 
   const expireToken = async () => {
     try {
@@ -50,7 +47,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         token: refreshToken,
       });
 
-      console.log(res);
       helpers.setCookie("token", res?.data?.token);
       helpers.setCookie("refreshtoken", res?.data?.refreshToken);
 
@@ -62,8 +58,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
   React.useEffect(() => {
-    // const interval = setInterval(refreshAccessToken, 1000000000000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(refreshAccessToken, 100000);
+    return () => clearInterval(interval);
   }, []);
 
   const signOut = async () => {

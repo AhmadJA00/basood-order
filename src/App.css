@@ -30,3 +30,15 @@
 .ant-form-item {
   margin: 0px !important;
 }
+.ant-spin-dot-item {
+  background-color: var(--color-primary) !important;
+}
+
+.ant-spin-fullscreen .ant-spin-dot-item {
+  background-color: var(--color-primary) !important;
+}
+/* Change both spinner dots and text color */
+.ant-spin-text {
+  font-size: 1.4rem !important;
+  color: var(--color-primary) !important;
+}

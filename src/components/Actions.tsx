@@ -7,58 +7,24 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router";
-import service from "../service";
-import { useNotification } from "../context/NotificationContext";
+
 import { useTranslation } from "react-i18next";
-import { DeleteConditions } from "../type";
-import helpers from "../helpers";
 type T = {
   row: any;
-  collectionName: string;
-  isDelete: boolean;
-  isEdit: boolean;
+  hasEdit: boolean;
   isShow: boolean;
-  fetchData: () => void;
-  deleteConditions?: DeleteConditions;
 };
 
 export const DeleteButton: React.FC<{
-  row: any;
-  collectionName: string;
-  fetchData: () => void;
-  label?: string;
-  deleteConditions?: DeleteConditions;
-}> = ({ row, collectionName, fetchData, label, deleteConditions }) => {
-  const { openNotification } = useNotification();
+  deleteFunction?: () => void;
+}> = ({ deleteFunction }) => {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
 
-  const deleteHandler = async () => {
-    setLoading(true);
-    try {
-      if (deleteConditions && deleteConditions?.length > 0) {
-        const result = await helpers.preventDeleteRecord(deleteConditions);
-        if (result.prevent) {
-          openNotification(
-            "error",
-            result.message || "Delete condition not met"
-          );
-          return;
-        }
-      }
-      await service.delete(collectionName, [row.id]);
-      openNotification("success", "Deleted successfully");
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
-      openNotification("error", errorMessage);
-    } finally {
-      setLoading(false);
-      setOpen(false);
-      fetchData();
-    }
-  };
+  if (!deleteFunction) {
+    return;
+  }
+
   return (
     <>
       <Button type="primary" danger onClick={() => setOpen(true)}>
@@ -88,8 +54,10 @@ export const DeleteButton: React.FC<{
             <Button
               type="primary"
               danger
-              onClick={deleteHandler}
-              loading={loading}
+              onClick={() => {
+                deleteFunction();
+                setOpen(false);
+              }}
               size="middle"
               className="!px-12"
             >
@@ -110,20 +78,12 @@ export const DeleteButton: React.FC<{
   );
 };
 
-const Actions: React.FC<T> = ({
-  row,
-  isDelete = false,
-  isEdit = false,
-  isShow = false,
-  collectionName,
-  fetchData = () => {},
-  deleteConditions,
-}) => {
+const Actions: React.FC<T> = ({ row, hasEdit = false, isShow = false }) => {
   const navigate = useNavigate();
 
   return (
     <Flex align="center" gap="small">
-      {isEdit && (
+      {hasEdit && (
         <Button type="primary" onClick={() => navigate(`edit/${row?.id}`)}>
           <EditOutlined />
         </Button>
@@ -132,14 +92,6 @@ const Actions: React.FC<T> = ({
         <Button type="primary" onClick={() => navigate(`show/${row?.id}`)}>
           <EyeOutlined />
         </Button>
-      )}
-      {isDelete && (
-        <DeleteButton
-          row={row}
-          deleteConditions={deleteConditions}
-          collectionName={collectionName}
-          fetchData={fetchData}
-        />
       )}
     </Flex>
   );

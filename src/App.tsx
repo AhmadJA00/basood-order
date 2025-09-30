@@ -17,13 +17,20 @@ import ThemeProvider from "./context/ThemeContext.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 
 const Login = React.lazy(() => import("./components/Login.tsx"));
-const Business = React.lazy(() => import("./modules/Businesses/Business.tsx"));
-const BusinessCreate = React.lazy(
-  () => import("./modules/Businesses/BusinessCreate.tsx")
+
+const BranchesList = React.lazy(
+  () => import("./modules/Branches/Branch.List.tsx")
 );
-const BusinessShow = React.lazy(
-  () => import("./modules/Businesses/BusinessShow.tsx")
+const BranchesCreate = React.lazy(
+  () => import("./modules/Branches/Branch.Create.tsx")
 );
+import { loader as branchesLoader } from "./modules/Branches/branch.api.ts";
+
+const CitiesList = React.lazy(() => import("./modules/Cities/City.List.tsx"));
+const CitiesCreate = React.lazy(
+  () => import("./modules/Cities/City.Create.tsx")
+);
+import { loader as citiesLoader } from "./modules/Cities/city.api.ts";
 
 function App() {
   const routes = createBrowserRouter(
@@ -32,19 +39,36 @@ function App() {
         {/* Root route with AdminLayout */}
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="business">
-            <Route index element={<RenderRoute element={<Business />} />} />
+          <Route path="branches">
+            <Route
+              index
+              element={<RenderRoute element={<BranchesList />} />}
+              loader={branchesLoader}
+            />
             <Route
               path="create"
-              element={<RenderRoute element={<BusinessCreate />} />}
+              element={<RenderRoute element={<BranchesCreate />} />}
             />
             <Route
               path="edit/:id"
-              element={<RenderRoute element={<BusinessCreate />} />}
+              element={<RenderRoute element={<BranchesCreate />} />}
+              loader={branchesLoader}
+            />
+          </Route>
+          <Route path="cities">
+            <Route
+              index
+              element={<RenderRoute element={<CitiesList />} />}
+              loader={citiesLoader}
             />
             <Route
-              path=":id"
-              element={<RenderRoute element={<BusinessShow />} />}
+              path="create"
+              element={<RenderRoute element={<CitiesCreate />} />}
+            />
+            <Route
+              path="edit/:id"
+              element={<RenderRoute element={<CitiesCreate />} />}
+              loader={citiesLoader}
             />
           </Route>
         </Route>

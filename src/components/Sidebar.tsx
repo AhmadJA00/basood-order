@@ -33,65 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     //   return;
     // }
     switch (key) {
-      case "business":
-        navigate("business");
+      case "branches":
+        navigate("branches");
         break;
-      case "appliedBusinesses":
-        navigate("business/applied");
-        break;
-      case "franchise":
-        navigate("franchise");
-        break;
-      case "appliedFranchises":
-        navigate("franchise/applied");
-        break;
-      case "lookingForInvestor":
-        navigate("lookingForInvestor");
-        break;
-      case "appliedInvestors":
-        navigate("lookingForInvestor/applied");
-        break;
-      case "lookingForIdea":
-        navigate("lookingForIdea");
-        break;
-      case "appliedIdeas":
-        navigate("lookingForIdea/applied");
-        break;
-      case "commercials":
-        navigate("commercials");
-        break;
-      case "appliedCommercials":
-        navigate("commercials/applied");
-        break;
-      case "primumBusinesses":
-        navigate("primumBusinesses");
-        break;
-      case "primumFranchises":
-        navigate("primumFranchises");
-        break;
-      case "primumCountries":
-        navigate("primumCountries");
-        break;
-      case "primumCategories":
-        navigate("primumCategories");
-        break;
-      case "businessConsultingsEn":
-        navigate("businessConsultingsEn");
-        break;
-      case "businessConsultingsKu":
-        navigate("businessConsultingsKu");
-        break;
-      case "businessConsultingsAr":
-        navigate("businessConsultingsAr");
-        break;
-      case "aboutUs":
-        navigate("aboutUs");
-        break;
-      case "contactUs":
-        navigate("contactUs");
-        break;
-      case "brokers":
-        navigate("brokers");
+      case "cities":
+        navigate("cities");
         break;
       case "logout":
         logout();
@@ -101,162 +47,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 
   const items: MenuItem[] = [
     {
-      key: "business",
-      label: t("businesses"),
+      key: "branches",
+      label: t("branches"),
       icon: <MdWork />,
-      children: [
-        {
-          key: "business",
-          icon: <MdWork />,
-          label: t("businesses"),
-        },
-        {
-          key: "appliedBusinesses",
-          icon: <MdOutlineContactPhone />,
-          label: t("appliedBusinesses"),
-        },
-      ],
     },
     {
-      key: "franchise",
-      label: t("franchises"),
+      key: "cities",
+      label: t("cities"),
       icon: <MdWork />,
-      children: [
-        {
-          key: "franchise",
-          icon: <MdWork />,
-          label: t("franchises"),
-        },
-        {
-          key: "appliedFranchises",
-          icon: <MdOutlineContactPhone />,
-          label: t("appliedFranchises"),
-        },
-      ],
-    },
-    {
-      key: "commercials",
-      icon: <MdWork />,
-      label: t("commercials"),
-      children: [
-        {
-          key: "commercials",
-          icon: <MdWork />,
-          label: t("commercials"),
-        },
-        {
-          key: "appliedCommercials",
-          icon: <MdOutlineContactPhone />,
-          label: t("appliedCommercials"),
-        },
-      ],
-    },
-    {
-      key: "lookingForInvestor",
-      icon: <MdWork />,
-      label: t("investors"),
-      children: [
-        {
-          key: "lookingForInvestor",
-          icon: <MdWork />,
-          label: t("investors"),
-        },
-        {
-          key: "appliedInvestors",
-          icon: <MdOutlineContactPhone />,
-          label: t("appliedInvestors"),
-        },
-      ],
     },
 
-    {
-      key: "lookingForIdea",
-      icon: <MdWork />,
-      label: t("ideas"),
-      children: [
-        {
-          key: "lookingForIdea",
-          icon: <MdWork />,
-          label: t("ideas"),
-        },
-        {
-          key: "appliedIdeas",
-          icon: <MdOutlineContactPhone />,
-          label: t("appliedIdeas"),
-        },
-      ],
-    },
-    {
-      key: "primumSliders",
-      icon: <MdWork />,
-      label: t("primumSliders"),
-      children: [
-        {
-          key: "primumBusinesses",
-          icon: <MdWork />,
-          label: t("primumBusinesses"),
-        },
-        {
-          key: "primumFranchises",
-          icon: <MdWork />,
-          label: t("primumFranchises"),
-        },
-        {
-          key: "primumCountries",
-          icon: <MdWork />,
-          label: t("primumCountries"),
-        },
-        {
-          key: "primumCategories",
-          icon: <MdWork />,
-          label: t("primumCategories"),
-        },
-      ],
-    },
-    {
-      key: "businessConsultings",
-      icon: <MdWork />,
-      label: t("businessConsultings"),
-      children: [
-        {
-          key: "businessConsultingsEn",
-          icon: <MdWork />,
-          label: t("english"),
-        },
-        {
-          key: "businessConsultingsKu",
-          icon: <MdWork />,
-          label: t("kurdish"),
-        },
-        {
-          key: "businessConsultingsAr",
-          icon: <MdWork />,
-          label: t("arabic"),
-        },
-      ],
-    },
-    {
-      key: "brokers",
-      icon: <MdWork />,
-      label: t("brokers"),
-    },
-    // {
-    //   key: "settings",
-    //   label: t("settings"),
-    //   icon: <IoSettingsSharp />,
-    //   children: [
-    //     {
-    //       key: "aboutUs",
-    //       icon: <MdOutlineImportContacts />,
-    //       label: t("aboutUs"),
-    //     },
-    //     {
-    //       key: "contactUs",
-    //       icon: <MdOutlineContactPhone />,
-    //       label: t("contactUs"),
-    //     },
-    //   ],
-    // },
     {
       key: "logout",
       icon: <CgLogOut />,

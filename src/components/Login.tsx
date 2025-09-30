@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import FormWrapper from "./FormWrapper";
 import { HTTP } from "../axios";
 import axios from "axios";
-import type { LoginType } from "../type";
+import type { LoginType } from "../gloabal.type";
 import helpers from "../helpers";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 type FieldType = {
   email?: string;
@@ -43,7 +43,6 @@ const Login: React.FC = () => {
           email: res.data?.user?.email,
           imageUrl: res.data?.user?.imageUrl,
         });
-        console.log(res.data);
         helpers.setCookie("refreshtoken", res.data.refreshToken);
         helpers.setCookie("token", res?.data?.token);
         helpers.setCookie("expired", res?.data?.expired);
