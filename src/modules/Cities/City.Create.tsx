@@ -5,7 +5,7 @@ import { useLoaderData, useParams, useRevalidator } from "react-router";
 import { postCity, putCity } from "./city.api";
 import CInput from "../../components/CInput";
 import FormWrapper from "../../components/FormWrapper";
-import type { CityDataType } from "./City.type";
+import type { CityDataType } from "./city.type";
 
 const Create = () => {
   const { t } = useTranslation();

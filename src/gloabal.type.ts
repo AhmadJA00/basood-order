@@ -47,3 +47,26 @@ export type QueryValidationType = {
   supplierId?: string;
   forCompare?: string;
 };
+export type DataGridProps<T> = {
+  columns: ColumnsType<T>[];
+  title: string;
+  hasCreate?: boolean;
+  data: {
+    items: T[];
+    totalCount: number;
+  };
+  loading: boolean;
+  className?: string;
+};
+export type ColumnsType<T> = {
+  title: string;
+  key: string;
+  dataIndex: string;
+  sorter?: boolean;
+  render?: (row: T) => React.ReactNode | React.ReactElement;
+};
+export type ActionsPropsType = {
+  id: string;
+  hasEdit?: boolean;
+  hasShow?: boolean;
+};

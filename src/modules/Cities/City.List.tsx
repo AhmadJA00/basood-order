@@ -1,10 +1,10 @@
 import { useLoaderData, useNavigation, useRevalidator } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-// import Actions from "../../components/Actions";
-import type { CityDataType, CityResType } from "./City.type";
 import DataGrid from "../../components/DataGrid";
 import Actions, { DeleteButton } from "../../components/Actions";
 import { deleteCity } from "./city.api";
+import type { ColumnsType } from "../../gloabal.type";
+import type { CityDataType, CityResType } from "./city.type";
 
 export default function List() {
   const data = useLoaderData() as CityResType;
@@ -42,13 +42,13 @@ export default function List() {
       render: (row: CityDataType) => {
         return (
           <div className="flex gap-2">
-            <Actions row={row} isShow={false} hasEdit />
+            <Actions id={row.id} hasShow={false} hasEdit />
             <DeleteButton deleteFunction={() => deleteFunction(row?.id)} />
           </div>
         );
       },
     },
-  ];
+  ] as ColumnsType<CityDataType>[];
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">

@@ -1,26 +1,8 @@
 import { Table, type TableProps } from "antd";
-import React from "react";
 import Loading from "./Loading";
 import { useSearchParams } from "react-router";
 import HeaderTable from "./HeaderTable";
-
-type DataGridProps<T> = {
-  columns: {
-    title: string;
-    key: string;
-    dataIndex: string;
-    sorter: boolean;
-    render: (row: T) => string | React.ReactNode;
-  }[];
-  title: string;
-  hasCreate?: boolean;
-  data: {
-    items: T[];
-    total: number;
-  };
-  loading: boolean;
-  className?: string;
-};
+import type { DataGridProps } from "../gloabal.type";
 
 const DataGrid = <T,>({
   columns,

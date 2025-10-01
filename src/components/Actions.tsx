@@ -9,11 +9,7 @@ import {
 import { useNavigate } from "react-router";
 
 import { useTranslation } from "react-i18next";
-type T = {
-  row: any;
-  hasEdit: boolean;
-  isShow: boolean;
-};
+import type { ActionsPropsType } from "../gloabal.type";
 
 export const DeleteButton: React.FC<{
   deleteFunction?: () => void;
@@ -78,18 +74,22 @@ export const DeleteButton: React.FC<{
   );
 };
 
-const Actions: React.FC<T> = ({ row, hasEdit = false, isShow = false }) => {
+const Actions: React.FC<ActionsPropsType> = ({
+  id,
+  hasEdit = false,
+  hasShow = false,
+}) => {
   const navigate = useNavigate();
 
   return (
     <Flex align="center" gap="small">
       {hasEdit && (
-        <Button type="primary" onClick={() => navigate(`edit/${row?.id}`)}>
+        <Button type="primary" onClick={() => navigate(`edit/${id}`)}>
           <EditOutlined />
         </Button>
       )}
-      {isShow && (
-        <Button type="primary" onClick={() => navigate(`show/${row?.id}`)}>
+      {hasShow && (
+        <Button type="primary" onClick={() => navigate(`show/${id}`)}>
           <EyeOutlined />
         </Button>
       )}

@@ -1,5 +1,5 @@
 import { Form, type FormProps } from "antd";
-import type { BranchDataType } from "./Branch.type";
+import type { BranchDataType } from "./branch.type";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useParams, useRevalidator } from "react-router";

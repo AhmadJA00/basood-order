@@ -1,9 +1,10 @@
 import { useLoaderData, useNavigation, useRevalidator } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import Actions from "../../components/Actions";
-import type { BranchDataType, BranchResType } from "./Branch.type";
+import type { BranchDataType, BranchResType } from "./branch.type";
 import DataGrid from "../../components/DataGrid";
 import Actions from "../../components/Actions";
+import type { ColumnsType } from "../../gloabal.type";
 
 export default function Branches() {
   const data = useLoaderData() as BranchResType;
@@ -33,20 +34,15 @@ export default function Branches() {
     {
       title: t("action"),
       key: "action",
-      render: (row: BranchResType) => {
+      render: (row: BranchDataType) => {
         return (
           <div className="flex gap-2">
-            <Actions
-              row={row}
-              isShow={false}
-              hasEdit
-              // isDelete={true}
-            />
+            <Actions id={row.id} hasShow={false} hasEdit />
           </div>
         );
       },
     },
-  ];
+  ] as ColumnsType<BranchDataType>[];
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
