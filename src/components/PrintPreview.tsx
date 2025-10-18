@@ -8,7 +8,10 @@ import {
   StyleSheet,
   PDFViewer,
   PDFDownloadLink,
+  Font,
 } from "@react-pdf/renderer";
+import basood from "../assets/basood.png";
+import Rabar_015 from "../assets/fonts/Rabar_015.ttf";
 
 interface PrintPreviewProps {
   title?: string;
@@ -25,42 +28,40 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
 }) => {
   const styles = StyleSheet.create({
     page: {
-      paddingHorizontal: 10,
-      marginVertical : 10,
+      paddingHorizontal: 20,
+      paddingTop: 20,
+      paddingBottom: 45,
       fontSize: 12,
-      paddingLeft : 20,
-      paddingRight : 20
     },
     header: {
       position: "absolute",
-      top: 0,
+      top: 10,
       left: 20,
       right: 20,
       height: 40,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      borderBottomWidth: 1,
-      borderBottomColor: "#aaa",
-      paddingBottom: 5,
+      borderBottom: "1px solid #f0f0f0",
     },
     logo: {
-      width: 40,
+      width: 50,
       height: 40,
     },
     headerText: {
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: "bold",
+      fontFamily: "Rabar_015",
     },
     footer: {
       position: "absolute",
-      bottom: 20,
+      bottom: 10,
       left: 40,
       right: 40,
-      display : "flex",
+      display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
-      borderTopWidth: 1,
+      borderTop: "1px solid #f0f0f0",
       paddingTop: 5,
     },
     pageNumber: {
@@ -68,8 +69,9 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
       color: "grey",
     },
     content: {
-      marginTop: 70,
-      marginBottom: 50,
+      marginTop: 40,
+      padding: 5,
+      border: "1px solid #f0f0f0",
     },
     viewerWrapper: {
       width: "100%",
@@ -94,10 +96,18 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
       cursor: "pointer",
       fontSize: 14,
     },
-      title: {
-    marginBottom: 4,
-  },
+    title: {},
   });
+
+  Font.register({
+    family: "Rabar_015",
+    src: Rabar_015,
+  });
+
+  const today = new Date();
+  const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
 
   // Inner PDF Document component
   const MyDocument = (
@@ -107,13 +117,24 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
       subject=""
       keywords=""
       creator="react-pdf"
-      producer="react-pdf"
-    >
+      producer="react-pdf">
       <Page orientation={orientation} size={"A4"} style={styles.page}>
         {/* Header */}
-        <View style={styles.header} fixed>
-          {false && <Image style={styles.logo} src={""} />}
+        <View style={{ ...styles.header }}>
+          <Image style={styles.logo} src={basood} />
           <Text style={styles.headerText}>{title}</Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}>
+            <Text style={{ ...styles.headerText, fontSize: 11 }}>
+              {"Hana"} : بەکارهێنەر
+            </Text>
+            <Text style={{ ...styles.headerText, fontSize: 11 }}>
+              {formattedDate} : بەروار
+            </Text>
+          </View>
         </View>
 
         {/* Main Content */}
@@ -122,13 +143,16 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
         </View>
 
         {/* Footer */}
-      <View style={styles.footer} fixed>
-        <View style={{width : 60 , height: 30}}>
-        <Text style={{ fontSize: 11 }}
-        render={({ pageNumber, totalPages }) =>
-            `Page ${pageNumber} / ${totalPages}`}/>
-            </View>
-</View>
+        <View style={styles.footer} fixed>
+          <View style={{ width: 60, height: 30 }}>
+            <Text
+              style={{ fontSize: 9, color: "grey" }}
+              render={({ pageNumber, totalPages }) =>
+                `Page ${pageNumber} / ${totalPages}`
+              }
+            />
+          </View>
+        </View>
       </Page>
     </Document>
   );
@@ -140,8 +164,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
         <PDFDownloadLink
           document={MyDocument}
           fileName={fileName}
-          style={styles.button}
-        >
+          style={styles.button}>
           {({ loading }) => (loading ? "Preparing..." : "Download PDF")}
         </PDFDownloadLink>
       </div>

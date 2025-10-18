@@ -1,14 +1,16 @@
-import type { OrderDetail } from "../components/OrderContent";
+import type {
+  OrderContentProps,
+  OrderDetail,
+} from "../components/OrderContent";
 import OrderContent from "../components/OrderContent";
 import PrintPreview from "../components/PrintPreview";
-
 
 export default function Dashboard() {
   const orderDetails: OrderDetail[] = [
     {
       productName: "Apple",
       productAmount: 50,
-      supplierId: 1,
+      supplier: 1,
       receiverNumberPhone: "123456789",
       address: "New Street 12",
       deliveryAmount: 5,
@@ -20,7 +22,7 @@ export default function Dashboard() {
     {
       productName: "Banana",
       productAmount: 40,
-      supplierId: 2,
+      supplier: 2,
       receiverNumberPhone: "987654321",
       address: "Green Avenue 8",
       deliveryAmount: 4,
@@ -32,7 +34,7 @@ export default function Dashboard() {
     {
       productName: "Apple",
       productAmount: 50,
-      supplierId: 1,
+      supplier: 1,
       receiverNumberPhone: "123456789",
       address: "New Street 12",
       deliveryAmount: 5,
@@ -44,7 +46,7 @@ export default function Dashboard() {
     {
       productName: "Banana",
       productAmount: 40,
-      supplierId: 2,
+      supplier: 2,
       receiverNumberPhone: "987654321",
       address: "Green Avenue 8",
       deliveryAmount: 4,
@@ -56,7 +58,7 @@ export default function Dashboard() {
     {
       productName: "Apple",
       productAmount: 50,
-      supplierId: 1,
+      supplier: 1,
       receiverNumberPhone: "123456789",
       address: "New Street 12",
       deliveryAmount: 5,
@@ -68,7 +70,7 @@ export default function Dashboard() {
     {
       productName: "Banana",
       productAmount: 40,
-      supplierId: 2,
+      supplier: 2,
       receiverNumberPhone: "987654321",
       address: "Green Avenue 8",
       deliveryAmount: 4,
@@ -80,7 +82,7 @@ export default function Dashboard() {
     {
       productName: "Apple",
       productAmount: 50,
-      supplierId: 1,
+      supplier: 1,
       receiverNumberPhone: "123456789",
       address: "New Street 12",
       deliveryAmount: 5,
@@ -92,7 +94,7 @@ export default function Dashboard() {
     {
       productName: "Banana",
       productAmount: 40,
-      supplierId: 2,
+      supplier: 2,
       receiverNumberPhone: "987654321",
       address: "Green Avenue 8",
       deliveryAmount: 4,
@@ -104,7 +106,7 @@ export default function Dashboard() {
     {
       productName: "Apple",
       productAmount: 50,
-      supplierId: 1,
+      supplier: 1,
       receiverNumberPhone: "123456789",
       address: "New Street 12",
       deliveryAmount: 5,
@@ -116,7 +118,7 @@ export default function Dashboard() {
     {
       productName: "Banana",
       productAmount: 40,
-      supplierId: 2,
+      supplier: 2,
       receiverNumberPhone: "987654321",
       address: "Green Avenue 8",
       deliveryAmount: 4,
@@ -124,15 +126,96 @@ export default function Dashboard() {
       invoiceNo: "INV-002",
       remark: "Fast delivery",
       status: 1,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 1,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 1,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 1,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 1,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 12,
+    },
+    {
+      productName: "Banana",
+      productAmount: 40,
+      supplier: 2,
+      receiverNumberPhone: "987654321",
+      address: "Green Avenue 8",
+      deliveryAmount: 4,
+      driverAmount: 2,
+      invoiceNo: "INV-002",
+      remark: "Fast delivery",
+      status: 18,
     },
   ];
 
+  const order: OrderContentProps = {
+    driver: "John Doe",
+    fromCity: "City A",
+    toCity: "City B",
+    zone: "Zone 1",
+    url: "http://example.com",
+    orderDetails: orderDetails,
+  };
+
   return (
-    <div style={{ padding: "20px"  }}>
+    <div style={{ padding: "20px" }}>
       <h1>Dashboard</h1>
       <PrintPreview
-        title="Order Details Report"
-        content={<OrderContent orderDetails={orderDetails} />}
+        title="ڕاپۆرتی شۆفێر"
+        content={<OrderContent {...order} />}
         fileName="Order_Report.pdf"
       />
     </div>
