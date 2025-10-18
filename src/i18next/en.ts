@@ -624,13 +624,14 @@ const en = {
     it_services: "Information Technology Services & Cloud Computing",
     barber_shop: "Barber Shop",
     fitness_center: "Fitness Center",
+
     general_services: "General Services",
     medical_center: "Medical Center",
     resturant: "Resturant",
     other: "Other",
     navigation: "Navigation",
     resources: "Resources",
-    address: "Dania Trade Center, Sulaymaniyah - Iraq",
+    address: "Address",
     contactUs: "Contact Us",
     investorsIdea: " Investor Ideas",
 

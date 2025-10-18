@@ -1,12 +1,13 @@
 import React from "react";
 import { Form, Input, InputNumber } from "antd";
 import type { Rule } from "antd/es/form";
+import type { InputName } from "../gloabal.type";
 
 interface InputProps<T extends object> {
   rules?: Rule[];
   validateFirst?: boolean;
   validateTrigger?: string[];
-  name: keyof T;
+  name: InputName<T>;
   value?: string | number;
   defaultValue?: string | number;
   onChange?: (
@@ -118,7 +119,7 @@ const CInput = <T extends object>({
           size={size}
           min={min}
           max={max}
-          className="focus:!bg-white focus:!border focus:!border-solid focus:!border-primary !w-full !text-xs md:text-base"
+          className="!bg-blue-sky  !border  !border-solid focus:!border-primary !w-full !text-xs md:text-base"
         />
       ) : (
         <InputComponent

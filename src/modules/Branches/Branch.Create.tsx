@@ -43,7 +43,7 @@ const Create = () => {
 
   return (
     <FormWrapper<BranchDataType>
-      title={id ? t("branchUpdate") : t("branchCreate")}
+      title={id ? t("update") : t("create")}
       form={form}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -53,11 +53,11 @@ const Create = () => {
       <CInput<BranchDataType>
         name="name"
         label={t("name")}
-        rules={[{ required: true, message: t("inputtitle") }]}
+        rules={[{ required: true, message: t("requiredField") }]}
       />
 
       <CInput<BranchDataType>
-        rules={[{ required: true, message: t("inputtitle") }]}
+        rules={[{ required: true, message: t("requiredField") }]}
         name="location"
         label={t("location")}
       />

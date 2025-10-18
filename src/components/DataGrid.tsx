@@ -5,6 +5,7 @@ import HeaderTable from "./HeaderTable";
 import type { DataGridProps } from "../gloabal.type";
 
 const DataGrid = <T,>({
+  children,
   columns,
   title,
   hasCreate = true,
@@ -54,14 +55,14 @@ const DataGrid = <T,>({
 
     if (sorter && !Array.isArray(sorter)) {
       const { columnKey, order } = sorter;
-      onSortChange(columnKey as string, order);
+      onSortChange(columnKey as string, order || null);
     }
   };
 
   const pagination = {
     current: currentPage,
     pageSize: pageSize,
-    total: data.total,
+    total: data.totalCount,
     showSizeChanger: true,
     showTotal: (total: number) => `Total ${total} items`,
   };
@@ -69,8 +70,9 @@ const DataGrid = <T,>({
   return (
     <div className={`relative ${className}`}>
       <p className="text-3xl py-2 text-center">{title}</p>
-      <div className="relative">
+      <div className="relative flex flex-col gap-5">
         <Loading isLoading={loading} />
+        {children}
         <HeaderTable hasCreate={hasCreate} />
         <Table
           dataSource={data.items}

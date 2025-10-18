@@ -2,10 +2,11 @@ import React from "react";
 import { Form, Select } from "antd";
 import type { Rule } from "antd/es/form";
 import type { SelectProps as AntSelectProps } from "antd";
+import type { InputName } from "../gloabal.type";
 
 interface SelectProps<T extends object> {
   rules?: Rule[];
-  name: keyof T;
+  name: InputName<T>;
   value?: string | number;
   defaultValue?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -20,6 +21,7 @@ interface SelectProps<T extends object> {
   optionFilterProp?: string;
   options: { label: string; value: string | number }[];
   allowClear?: boolean;
+  multiple?: boolean;
 }
 
 const CSelect = <T extends object>({
@@ -37,6 +39,7 @@ const CSelect = <T extends object>({
   optionFilterProp = "label",
   options,
   allowClear = true,
+  multiple = false,
 }: SelectProps<T>) => {
   return (
     <Form.Item<T>
@@ -51,6 +54,7 @@ const CSelect = <T extends object>({
     >
       <Select
         showSearch={showSearch}
+        mode={multiple ? "multiple" : undefined}
         optionFilterProp={optionFilterProp}
         options={options}
         placeholder={placeholder || label}

@@ -121,7 +121,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     colorBgElevated: "#F5FBFF", // Background of elevated components
     colorBgLayout: "#F5FBFF", // Layout background
     colorBgSpotlight: "#F5FBFF", // Mask background
-    colorBgMask: "#F5FBFF", // Popup background
+    colorBgMask: "rgba(245, 251, 255,0.5)", // Popup background
   };
 
   return (

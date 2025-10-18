@@ -11,6 +11,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     email: helpers.getCookie("email"),
     username: helpers.getCookie("username"),
     imageUrl: helpers.getCookie("imageurl"),
+    userType: helpers.getCookie("usertype"),
   });
   const [userSeation, setUserSeation] = React.useState<UserSeation | null>({
     refreshToken: helpers.getCookie("refreshtoken"),

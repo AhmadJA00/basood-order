@@ -13,7 +13,8 @@ type FormWrapperProps<FieldType = any> = {
   isLoading?: boolean;
   initialValues?: any;
   className?: string;
-  columns?: 1 | 2 | 3 | 4;
+  noSubmit?: boolean;
+  submitText?: string;
 };
 
 const FormWrapper = <FieldType extends {} = any>({
@@ -25,29 +26,42 @@ const FormWrapper = <FieldType extends {} = any>({
   isLoading,
   initialValues,
   className = "",
-  columns = 3,
+  noSubmit,
+  submitText = "submit",
 }: FormWrapperProps<FieldType>) => {
   const { t } = useTranslation();
   const { id } = useParams();
   return (
-    <Card className="relative">
-      <p className="text-3xl py-2 text-center">{title}</p>
+    <Card
+      title={
+        <p className="text-2xl py-3 text-center  bg-gradient-to-br  from-primary-light from-40% to-primary ">
+          {title}
+        </p>
+      }
+      className="relative overflow-hidden"
+      styles={{
+        header: {
+          padding: "0px",
+          color: "white",
+        },
+      }}
+    >
       <Loading isLoading={isLoading || false} />
       <Form<FieldType>
         form={form}
         name="basic"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        className={`grid grid-cols-1 gap-x-5 gap-y-4 ${className}`}
         layout="vertical"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 24 }}
         initialValues={initialValues}
+        className={`!space-y-5 ${className}`}
       >
         {children}
-        <Button type="primary" htmlType="submit" loading={isLoading} block>
-          {isLoading ? t("processing") : id ? t("update") : t("submit")}
-        </Button>
+        {!noSubmit && (
+          <Button type="primary" htmlType="submit" loading={isLoading} block>
+            {isLoading ? t("processing") : id ? t("update") : t(submitText)}
+          </Button>
+        )}
       </Form>
     </Card>
   );

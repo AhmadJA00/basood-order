@@ -1,25 +1,24 @@
 import React from "react";
-import CInput from "../../modules/Components/CInput";
-import helpers from "../helpers";
 import { useTranslation } from "react-i18next";
-import { Select } from "antd";
+import CInput from "./CInput";
+import type { InputName } from "../gloabal.type";
 
 interface PhoneInputProps<T extends object> {
-  form: any;
-  name: keyof T;
+  name: InputName<T>;
   label: string;
+  className?: string;
   rules?: any;
-  countryCodeName?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const PhoneNumberInput = <T extends object>({
   name,
-  form,
   label,
   rules,
-  countryCodeName = "countryCode",
+  className,
   required = false,
+  disabled = false,
 }: PhoneInputProps<T>) => {
   const { t } = useTranslation();
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,7 +43,9 @@ const PhoneNumberInput = <T extends object>({
   };
   return (
     <CInput<T>
+      className={className}
       name={name}
+      disabled={disabled}
       label={label}
       type="number"
       rules={[
@@ -60,16 +61,6 @@ const PhoneNumberInput = <T extends object>({
         }),
       ]}
       onKeyDown={handleKeyDown}
-      addonBefore={
-        <Select
-          options={helpers.countryPhoneCodes}
-          placeholder={t("selectCountryCode")}
-          defaultValue={helpers.countryPhoneCodes[0].value}
-          onChange={(value) =>
-            form.setFieldsValue({ [countryCodeName]: value })
-          }
-        />
-      }
     />
   );
 };

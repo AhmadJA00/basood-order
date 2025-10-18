@@ -8,3 +8,7 @@ export type BranchDataType = {
   name: string;
   description?: string;
 };
+export type BranchListDataType = Omit<
+  BranchDataType,
+  "location" | "description"
+>;

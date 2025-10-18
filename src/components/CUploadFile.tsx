@@ -1,13 +1,13 @@
-import React from "react";
 import { Form, Upload } from "antd";
-import type { Rule } from "antd/es/form";
+import type { FormInstance, Rule } from "antd/es/form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import type { InputName } from "../gloabal.type";
 
 interface SelectProps<T extends object> {
   rules?: Rule[];
-  name: keyof T;
-  form: any;
+  name: InputName<T>;
+  form: FormInstance;
   accept?: string;
   label?: string;
   disabled?: boolean;

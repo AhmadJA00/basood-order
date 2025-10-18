@@ -30,8 +30,8 @@ const Navbar: React.FC<NavbarProps> = ({ collapsed, setCollapsed }) => {
             }
           }}
           options={[
-            { label: "English", value: "en" },
-            { label: "العربية", value: "ar" },
+            // { label: "English", value: "en" },
+            // { label: "العربية", value: "ar" },
             { label: "کوردی", value: "he" },
           ]}
         />

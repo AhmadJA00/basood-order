@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type gloabResponseType<T> = {
   items: T[];
   currentPage: number;
@@ -14,6 +16,7 @@ export type UserData = {
   username: string;
   email: string;
   imageUrl: string;
+  userType: "admin" | "supplier" | "driver";
 };
 
 export type LoginType = {
@@ -42,12 +45,9 @@ export type QueryValidationType = {
   currentOrderBy?: string;
   isAscending?: string;
   search?: string;
-  status?: string;
-  customerId?: string;
-  supplierId?: string;
-  forCompare?: string;
 };
 export type DataGridProps<T> = {
+  children?: React.ReactNode;
   columns: ColumnsType<T>[];
   title: string;
   hasCreate?: boolean;
@@ -70,3 +70,22 @@ export type ActionsPropsType = {
   hasEdit?: boolean;
   hasShow?: boolean;
 };
+
+export type LoaderGetFuncType = {
+  queryOBJ?: QueryValidationType;
+  id?: string;
+  signal?: AbortSignal;
+};
+export type CardProps = {
+  title: string;
+  children: ReactNode;
+};
+export type InputName<T> =
+  | keyof T
+  | {
+      [K in keyof T]: T[K] extends Array<infer U>
+        ? [K, keyof U]
+        : T[K] extends object
+        ? [K, keyof T[K]]
+        : never;
+    }[keyof T];

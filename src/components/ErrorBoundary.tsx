@@ -7,11 +7,11 @@ function ErrorFallback() {
   const navigate = useNavigate();
   console.error("Router Error:", error);
 
-  React.useEffect(() => {
-    if (error.response.status === 401) {
-      navigate(`/login?prevRoute=${pathname}`);
-    }
-  }, [pathname]);
+  // React.useEffect(() => {
+  //   if (error.response.status === 401) {
+  //     navigate(`/login?prevRoute=${pathname}`);
+  //   }
+  // }, [pathname]);
 
   return "error";
   // <div role="alert">

@@ -2,17 +2,8 @@ import type { QueryValidationType } from "./gloabal.type";
 
 const helpers = {
   queryValidation: (queryOBJ: QueryValidationType) => {
-    const {
-      pageSize,
-      currentPage,
-      currentOrderBy,
-      isAscending,
-      search,
-      status,
-      customerId,
-      supplierId,
-      forCompare,
-    } = queryOBJ;
+    const { pageSize, currentPage, currentOrderBy, isAscending, search } =
+      queryOBJ;
 
     const urlSearchParams = new URLSearchParams();
 
@@ -45,19 +36,6 @@ const helpers = {
     ) {
       urlSearchParams.set("currentOrderBy", currentOrderBy);
     }
-    if (status !== null && status !== undefined && status !== "") {
-      urlSearchParams.set("status", status);
-    }
-    if (customerId !== null && customerId !== undefined && customerId !== "") {
-      urlSearchParams.set("customerId", customerId);
-    }
-    if (supplierId !== null && supplierId !== undefined && supplierId !== "") {
-      urlSearchParams.set("supplierId", supplierId);
-    }
-
-    if (forCompare !== null && forCompare !== undefined && forCompare !== "") {
-      urlSearchParams.set("forCompare", forCompare ? "True" : "False");
-    }
 
     return urlSearchParams;
   },
@@ -83,5 +61,9 @@ const helpers = {
 
     document.cookie = `${name}=${value};` + expires + ";path=/";
   },
+  paymentTerm: [
+    { value: 1, label: "prePaid" },
+    { value: 2, label: "loan" },
+  ],
 };
 export default helpers;

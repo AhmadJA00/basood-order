@@ -10,8 +10,8 @@ i18next
   .init({
     supportedLngs: ["en", "ar", "he"],
     // debug: true,
-    lng: localStorage.getItem("i18nextLng") || "en",
-    fallbackLng: localStorage.getItem("i18nextLng") || "en",
+    lng: localStorage.getItem("i18nextLng") || "ku",
+    fallbackLng: localStorage.getItem("i18nextLng") || "ku",
     interpolation: {
       escapeValue: false,
     },

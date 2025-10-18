@@ -43,7 +43,7 @@ const Create = () => {
 
   return (
     <FormWrapper<CityDataType>
-      title={id ? t("cityUpdate") : t("cityCreate")}
+      title={id ? t("update") : t("create")}
       form={form}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -53,7 +53,7 @@ const Create = () => {
       <CInput<CityDataType>
         name="name"
         label={t("name")}
-        rules={[{ required: true, message: t("inputtitle") }]}
+        rules={[{ required: true, message: t("requiredField") }]}
       />
 
       <CInput<CityDataType> name="description" label={t("description")} />
