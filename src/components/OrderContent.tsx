@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import { OrderStatus } from "../enums";
 import Rabar_022 from "../assets/fonts/Rabar_022.ttf";
 import { generateBarcode } from "../helper/generateBarcode";
+import React from "react";
+import QRCode from "qrcode";
 
 export interface OrderDetail {
   productName: string;
@@ -18,6 +20,7 @@ export interface OrderDetail {
 
 export interface OrderContentProps {
   driver: string;
+  driverId: number | string;
   fromCity: string;
   toCity: string;
   zone: string;
@@ -30,6 +33,8 @@ const styles = StyleSheet.create({
     width: "100%",
     direction: "rtl",
     fontFamily: "Rabar_022",
+    border: "1px solid #f0f0f0",
+    padding: 5,
   },
   headerRow: {
     flexDirection: "row-reverse",
@@ -44,24 +49,25 @@ const styles = StyleSheet.create({
   cellHeader: {
     flex: 1,
     padding: 4,
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "bold",
     textAlign: "center",
     fontFamily: "Rabar_022",
   },
   cell: {
     flex: 1,
-    padding: 6,
+    padding: 4,
     fontSize: 9,
     textAlign: "center",
     fontFamily: "Rabar_022",
   },
   total: {
-    marginTop: 10,
-    textAlign: "left",
+    padding: 10,
+    textAlign: "right",
     fontSize: 11,
     fontWeight: "bold",
     fontFamily: "Rabar_022",
+    width: "25%",
   },
 
   box1: {
@@ -70,6 +76,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     direction: "rtl",
     width: "100%",
+    paddingTop: 4,
+  },
+  qr: {
+    position: "absolute",
+    top: -7,
+    left: 0,
+    width: 35,
+    height: 35,
   },
 });
 
@@ -89,20 +103,58 @@ const OrderContent = (data: OrderContentProps) => {
     0
   );
 
+  interface Props {
+    driverId: number | string;
+  }
+
+  const DriverQRCode: React.FC<Props> = ({ driverId }) => {
+    const [qrCodeDataURL, setQrCodeDataURL] = React.useState<string>("");
+
+    React.useEffect(() => {
+      const today = new Date().toISOString().split("T")[0];
+      const qrText = `driverId:${driverId}/date:${today}`;
+
+      QRCode.toDataURL(qrText, { margin: 1, width: 120 })
+        .then(setQrCodeDataURL)
+        .catch(console.error);
+    }, [driverId]);
+
+    return (
+      <>{qrCodeDataURL && <Image src={qrCodeDataURL} style={styles.qr} />}</>
+    );
+  };
+
   return (
     <View>
       <View style={{ ...styles.box1, marginBottom: 10 }}>
+        <DriverQRCode driverId={data.driverId} />
+        <View style={{ width: "5%" }}></View>
         <Text
-          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
+          style={{
+            fontSize: 11,
+            fontWeight: "bold",
+            fontFamily: "Rabar_022",
+            width: "15%",
+          }}>
           {data.zone} :زۆن
         </Text>
 
         <Text
-          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
+          style={{
+            fontSize: 11,
+            fontWeight: "bold",
+            fontFamily: "Rabar_022",
+            width: "15%",
+          }}>
           {data.toCity} :بۆ
         </Text>
         <Text
-          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
+          style={{
+            fontSize: 11,
+            fontWeight: "bold",
+            fontFamily: "Rabar_022",
+            width: "15%",
+          }}>
           {data.fromCity} :لە
         </Text>
         <Text
@@ -147,6 +199,10 @@ const OrderContent = (data: OrderContentProps) => {
                 ...styles.cell,
                 backgroundColor: OrderStatus.find((e) => e.id === item.status)
                   ?.color,
+                borderRadius: 2,
+                fontSize: 7,
+                marginTop: 3,
+                height: 20,
               }}>
               {OrderStatus.find((e) => e.id === item.status)?.kurdish}
             </Text>

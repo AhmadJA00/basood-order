@@ -56,8 +56,8 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
     footer: {
       position: "absolute",
       bottom: 10,
-      left: 40,
-      right: 40,
+      left: 20,
+      right: 20,
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
@@ -70,8 +70,6 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
     },
     content: {
       marginTop: 40,
-      padding: 5,
-      border: "1px solid #f0f0f0",
     },
     viewerWrapper: {
       width: "100%",
@@ -144,13 +142,45 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
 
         {/* Footer */}
         <View style={styles.footer} fixed>
-          <View style={{ width: 60, height: 30 }}>
+          <View
+            style={{
+              display: "flex",
+              width: "100%",
+              height: 30,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}>
             <Text
-              style={{ fontSize: 9, color: "grey" }}
+              style={{
+                fontSize: 9,
+                color: "grey",
+                width: "33.33%",
+                fontFamily: "Rabar_015",
+              }}
               render={({ pageNumber, totalPages }) =>
                 `Page ${pageNumber} / ${totalPages}`
               }
             />
+            <Text
+              style={{
+                fontSize: 9,
+                color: "grey",
+                textAlign: "center",
+                fontFamily: "Rabar_015",
+                width: "33.33%",
+              }}>
+              0750 987 6543 - 0750 123 4567 : ژمارەی تەلەفۆن
+            </Text>
+            <Text
+              style={{
+                fontSize: 9,
+                color: "grey",
+                textAlign: "right",
+                fontFamily: "Rabar_015",
+                width: "33.34%",
+              }}>
+              © ناونیشان : هەولێر - فلکەی زەراعەی بەرامبەر ئامادەی ئاگرین
+            </Text>
           </View>
         </View>
       </Page>
