@@ -70,6 +70,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
     },
     content: {
       marginTop: 40,
+      padding: 5,
     },
     viewerWrapper: {
       width: "100%",
@@ -169,7 +170,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
                 fontFamily: "Rabar_015",
                 width: "33.33%",
               }}>
-              0750 987 6543 - 0750 123 4567 : ژمارەی تەلەفۆن
+              0750 987 6543 - 0750 123 4567 : ژمارەی مۆبایل
             </Text>
             <Text
               style={{

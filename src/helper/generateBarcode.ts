@@ -5,9 +5,9 @@ export const generateBarcode = (text: string) => {
   JsBarcode(canvas, text, {
     format: "CODE128",       
     displayValue: true,      
-    fontSize: 11,            
+    fontSize: 16,            
     textMargin: 2,          
-    height: 40,              
+    height: 30,              
     width: 2,                
   });
   return canvas.toDataURL("image/png");

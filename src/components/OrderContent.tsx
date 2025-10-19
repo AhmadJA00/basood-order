@@ -1,30 +1,25 @@
 import { View, Text, StyleSheet, Font, Image } from "@react-pdf/renderer";
-import { OrderStatus } from "../enums";
 import Rabar_022 from "../assets/fonts/Rabar_022.ttf";
-import { generateBarcode } from "../helper/generateBarcode";
 import React from "react";
 import QRCode from "qrcode";
 
 export interface OrderDetail {
-  productName: string;
+  id: string | number;
   productAmount: number;
-  supplier: number;
+  supplierName: string | number;
+  supplierNumberPhone: string | number;
   receiverNumberPhone: string;
   address: string;
-  deliveryAmount: number;
   driverAmount: number;
-  invoiceNo: string;
-  remark: string;
-  status: number;
 }
 
 export interface OrderContentProps {
+  id: string;
   driver: string;
   driverId: number | string;
   fromCity: string;
   toCity: string;
   zone: string;
-  url: string;
   orderDetails: OrderDetail[];
 }
 
@@ -45,6 +40,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row-reverse",
     borderColor: "#ccc",
+    // height: 35,
+    display: "flex",
+    alignItems: "center",
   },
   cellHeader: {
     flex: 1,
@@ -67,7 +65,10 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "bold",
     fontFamily: "Rabar_022",
-    width: "25%",
+    width: "50%",
+    flexDirection: "row",
+    display: "flex",
+    justifyContent: "space-between",
   },
 
   box1: {
@@ -94,12 +95,12 @@ const OrderContent = (data: OrderContentProps) => {
   });
 
   const totalAmount = data.orderDetails.reduce(
-    (sum, item) => sum + item.productAmount,
+    (sum, item) => sum + item.productAmount + item.driverAmount,
     0
   );
 
-  const deliveryAmount = data.orderDetails.reduce(
-    (sum, item) => sum + item.deliveryAmount,
+  const driverAmount = data.orderDetails.reduce(
+    (sum, item) => sum + item.driverAmount,
     0
   );
 
@@ -124,6 +125,30 @@ const OrderContent = (data: OrderContentProps) => {
     );
   };
 
+  const QRCodeGenerator: React.FC<Props> = ({ driverId }) => {
+    const [qrCodeDataURL, setQrCodeDataURL] = React.useState<string>("");
+
+    React.useEffect(() => {
+      const today = new Date().toISOString().split("T")[0];
+      const qrText = `driverId:${driverId}/date:${today}`;
+
+      QRCode.toDataURL(qrText, { margin: 1, width: 120 })
+        .then(setQrCodeDataURL)
+        .catch(console.error);
+    }, [driverId]);
+
+    return (
+      <>
+        {qrCodeDataURL && (
+          <Image
+            src={qrCodeDataURL}
+            style={{ width: 31, height: 31, marginVertical: 3 }}
+          />
+        )}
+      </>
+    );
+  };
+
   return (
     <View>
       <View style={{ ...styles.box1, marginBottom: 10 }}>
@@ -136,7 +161,7 @@ const OrderContent = (data: OrderContentProps) => {
             fontFamily: "Rabar_022",
             width: "15%",
           }}>
-          {data.zone} :زۆن
+          ناوچە : {data.zone}
         </Text>
 
         <Text
@@ -146,20 +171,12 @@ const OrderContent = (data: OrderContentProps) => {
             fontFamily: "Rabar_022",
             width: "15%",
           }}>
-          {data.toCity} :بۆ
+          گەیاندنی {data.fromCity} بۆ {data.toCity}
         </Text>
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: "bold",
-            fontFamily: "Rabar_022",
-            width: "15%",
-          }}>
-          {data.fromCity} :لە
-        </Text>
+
         <Text
           style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
-          {data.driver} :ناوی شۆفێر
+          ناوی شۆفێر : {data.driver}
         </Text>
       </View>
       <View style={styles.table}>
@@ -167,16 +184,20 @@ const OrderContent = (data: OrderContentProps) => {
           <View style={{ width: 25 }}>
             <Text style={{ ...styles.cellHeader, width: 25 }}>#</Text>
           </View>
-          <Text style={styles.cellHeader}>ناوی بەرهەم</Text>
-          <Text style={styles.cellHeader}>نرخی بەرهەم</Text>
-          <Text style={styles.cellHeader}>نرخی گەیاندن</Text>
-          <Text style={styles.cellHeader}>نرخی شۆفێر</Text>
-          <Text style={styles.cellHeader}>دۆخ</Text>
+          <Text style={styles.cellHeader}>ناوی فرۆشیار</Text>
 
-          <Text style={styles.cellHeader}>ژمارەی موبایل</Text>
+          <Text style={styles.cellHeader}>ژ. فرۆشیار</Text>
+          <Text style={styles.cellHeader}>نرخی بەرهەم</Text>
+          {/* <Text style={styles.cellHeader}>نرخی گەیاندن</Text> */}
+          <Text style={styles.cellHeader}>نرخی شۆفێر</Text>
+          {/* <Text style={styles.cellHeader}>دۆخ</Text> */}
+
+          <Text style={styles.cellHeader}>ژ. وەرگر</Text>
           <Text style={styles.cellHeader}>ناونیشان</Text>
-          <Text style={styles.cellHeader}>ژمارەی وەسڵ</Text>
-          <Text style={styles.cellHeader}>تێبینی</Text>
+          {/* 
+          <View style={{ width: 30 }}>
+            <Text style={{ ...styles.cellHeader, width: 30 }}></Text>
+          </View> */}
         </View>
 
         {data.orderDetails.map((item, index) => (
@@ -187,14 +208,21 @@ const OrderContent = (data: OrderContentProps) => {
               backgroundColor: index % 2 === 0 ? "#ffffff" : "#f7f7f7",
             }}
             key={index}>
-            <View style={{ width: 25 }}>
+            <View
+              style={{
+                width: 25,
+                height: 25,
+                padding: 0,
+              }}>
               <Text style={{ ...styles.cell, width: 25 }}>{index + 1}</Text>
             </View>
-            <Text style={styles.cell}>{item.productName}</Text>
+            <Text style={styles.cell}>{item.supplierName}</Text>
+            <Text style={styles.cell}>{item.supplierNumberPhone}</Text>
+
             <Text style={styles.cell}>{item.productAmount.toFixed(2)}</Text>
-            <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text>
+            {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
             <Text style={styles.cell}>{item.driverAmount.toFixed(2)}</Text>
-            <Text
+            {/* <Text
               style={{
                 ...styles.cell,
                 backgroundColor: OrderStatus.find((e) => e.id === item.status)
@@ -205,31 +233,25 @@ const OrderContent = (data: OrderContentProps) => {
                 height: 20,
               }}>
               {OrderStatus.find((e) => e.id === item.status)?.kurdish}
-            </Text>
+            </Text> */}
             <Text style={styles.cell}>{item.receiverNumberPhone}</Text>
 
             <Text style={styles.cell}>{item.address}</Text>
-            {item.invoiceNo === "" ? (
-              <Text style={styles.cell}></Text>
-            ) : (
-              <>
-                <Image
-                  src={generateBarcode(item.invoiceNo)}
-                  style={{ width: 100 }}
-                />
-              </>
-            )}
-            <Text style={styles.cell}>{item.remark}</Text>
+            {/* <View
+              style={{
+                padding: 2,
+                width: 35,
+              }}>
+              <QRCodeGenerator driverId={data.id} />
+            </View> */}
           </View>
         ))}
       </View>
 
-      <Text style={styles.total}>
-        کۆی گشتی: {totalAmount.toFixed(2)} د.ع
-        {"\n"}پارەی گەیاندن: {deliveryAmount.toFixed(2)} د.ع
-        {"\n"}کۆی گشتی بە گەیاندن: {(totalAmount + deliveryAmount).toFixed(2)}{" "}
-        د.ع
-      </Text>
+      <View style={styles.total}>
+        <Text>کۆی گشتی : {totalAmount.toFixed(2)} دینار</Text>
+        <Text>نرخی گەیاندنی شۆفێر : {driverAmount.toFixed(2)} دینار</Text>
+      </View>
     </View>
   );
 };

@@ -16,5 +16,5 @@ export const OrderStatus = [
   { id: 15, value: "Partially Payment Processing", kurdish: "بەشێك لە پارەدان لە پڕۆسەدایە", color: "#9B59B6" }, // light purple
   { id: 16, value: "Cancelled Supplier Received", kurdish: "هەڵوەشاوە - دابینکەر وەرگرت", color: "#E74C3C" },
   { id: 17, value: "Partially Cancelled Supplier Received", kurdish: "بەشێك هەڵوەشاوە - دابینکەر وەرگرت", color: "#F1948A" },
-  { id: 18, value: "Completed", kurdish: "تەواو بوو", color: "#198754" }, // dark green
+  { id: 18, value: "Completed", kurdish: "گەیشتووەکان", color: "#198754" }, // dark green
 ] as const;
