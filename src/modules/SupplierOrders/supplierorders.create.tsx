@@ -50,7 +50,7 @@ const Create = () => {
       isLoading={isLoading}
     >
       <Flex justify="center" gap={"middle"} vertical>
-        <Flex justify="center" gap={"middle"} align="center">
+        <div className="flex flex-col lg:flex-row gap-2">
           <CInput<SupplierOrderDataType>
             name={"productName"}
             label={t("productName")}
@@ -70,16 +70,16 @@ const Create = () => {
             className="flex-1"
             rules={[{ required: true, message: t("requiredField") }]}
           />
-        </Flex>
-        <Flex justify="center" gap={"middle"} align="center">
+        </div>
+        <div className="flex flex-col lg:flex-row gap-2">
           <CInput<SupplierOrderDataType>
             name={"invoiceNo"}
             label={t("invoiceNo")}
             className="flex-1"
             type="number"
           />
-        </Flex>
-        <Flex justify="center" gap={"middle"} align="center">
+        </div>
+        <div className="flex flex-col lg:flex-row gap-2">
           <CInput<SupplierOrderDataType>
             name={"address"}
             label={t("address")}
@@ -91,7 +91,7 @@ const Create = () => {
             label={t("note")}
             className="flex-1"
           />
-        </Flex>
+        </div>
       </Flex>
     </FormWrapper>
   );

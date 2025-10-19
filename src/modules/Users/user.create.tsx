@@ -56,7 +56,7 @@ const Create = () => {
       setIsLoading(true);
       if (id) {
         await putUser<UserDataType>(
-          { ...formData, driverId: 1, userType: 2 },
+          { ...formData, driverId: 2, userType: 2 },
           id
         );
         revalidator.revalidate();

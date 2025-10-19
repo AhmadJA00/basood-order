@@ -2,9 +2,11 @@ import { useLoaderData, useNavigation, useRevalidator } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import DataGrid from "../../components/DataGrid";
 import Actions, { DeleteButton } from "../../components/Actions";
-import { deleteSupplier } from "./supplier.api";
+import { createSupplierAccount, deleteSupplier } from "./supplier.api";
 import type { ColumnsType } from "../../gloabal.type";
-import type { SupplierDataType, SupplierResType } from "./supplier.type";
+import type { SupplierResDataType, SupplierResType } from "./supplier.type";
+import { Button, Tooltip } from "antd";
+import { BiSolidUserAccount } from "react-icons/bi";
 
 export default function List() {
   const data = useLoaderData() as SupplierResType;
@@ -22,37 +24,66 @@ export default function List() {
       console.error("Error creating LookingForInvestor:", error);
     }
   };
+  const createAccount = async (id: string) => {
+    try {
+      if (id) {
+        await createSupplierAccount(id);
+        revalidator.revalidate();
+      }
+    } catch (error) {
+      console.error("Error creating LookingForInvestor:", error);
+    }
+  };
 
   const columns = [
     {
       title: t("name"),
       key: "name",
       sorter: true,
-      render: (row: SupplierDataType) => row.name,
+      render: (row: SupplierResDataType) => row.name,
     },
     {
-      title: t("description"),
-      key: "description",
+      title: t("phoneNumber"),
+      key: "phoneNumber",
       sorter: true,
-      render: (row: SupplierDataType) => row?.description || "-",
+      render: (row: SupplierResDataType) =>
+        `${row?.primaryPhone} ${
+          row?.secondaryPhone ? ` - ${row?.secondaryPhone}` : ""
+        }`,
+    },
+    {
+      title: t("address"),
+      key: "address",
+      sorter: true,
+      render: (row: SupplierResDataType) => row.address,
     },
     {
       title: t("action"),
       key: "action",
-      render: (row: SupplierDataType) => {
+      render: (row: SupplierResDataType) => {
         return (
           <div className="flex gap-2">
             <Actions id={row.id} hasShow={false} hasEdit />
             <DeleteButton deleteFunction={() => deleteFunction(row?.id)} />
+            <Tooltip title={t(`createAccount`)} color="#003049">
+              <Button
+                type="primary"
+                onClick={() => {
+                  createAccount(row.accountId);
+                }}
+              >
+                <BiSolidUserAccount />
+              </Button>
+            </Tooltip>{" "}
           </div>
         );
       },
     },
-  ] as ColumnsType<SupplierDataType>[];
+  ] as ColumnsType<SupplierResDataType>[];
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
-      <DataGrid<SupplierDataType>
+      <DataGrid<SupplierResDataType>
         title={t("suppliers")}
         columns={columns}
         data={data}

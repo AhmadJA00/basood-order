@@ -50,6 +50,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "orders":
         navigate("orders");
         break;
+      case "orderPending":
+        navigate("orders/pending");
+        break;
       case "supplierOrders":
         navigate("supplierOrders");
         break;
@@ -88,29 +91,33 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: "branches",
       label: t("branches"),
       icon: <MdWork />,
-      allowed: true, // Example: Always allowed
+      allowed: currentUser?.userType === "admin", // Example: Always allowed
     },
     {
       key: "orders-group", // Changed key to avoid conflict with child 'orders' key
       label: t("orders"),
       icon: <MdWork />,
-      // The parent group is allowed if it has at least one allowed child,
-      // but for simplicity, we can set its 'allowed' based on a general permission.
-      // The filtering function below will handle sub-item visibility.
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
       children: [
         {
           key: "orders",
           label: t("orders"),
           icon: <MdWork />,
-          allowed: true, // Example: Always allowed
+          allowed: currentUser?.userType === "admin", // Example: Always allowed
         },
         {
           key: "supplierOrders",
           label: t("supplierOrders"),
           icon: <MdWork />,
           // This item is only allowed if the userType is 'supplier'
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
+        },
+        {
+          key: "orderPending",
+          label: t("orderPending"),
+          icon: <MdWork />,
+          // This item is only allowed if the userType is 'supplier'
+          allowed: currentUser?.userType === "admin",
         },
       ],
     },
@@ -119,14 +126,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       label: t("supplierOrders"),
       icon: <MdWork />,
       // This item is only allowed if the userType is 'supplier'
-      allowed: currentUser?.userType === "supplier",
+      allowed:
+        currentUser?.userType === "supplier" ||
+        currentUser?.userType === "driver",
     },
     // ... rest of your items
     {
       key: "drivers",
       label: t("drivers"),
       icon: <MdWork />,
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
     },
     {
       key: "accountant",
@@ -138,19 +147,19 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           key: "safes",
           label: t("safes"),
           icon: <MdWork />,
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
         },
         {
           key: "expensives",
           label: t("expensives"),
           icon: <MdWork />,
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
         },
         {
           key: "transfers",
           label: t("transfers"),
           icon: <MdWork />,
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
         },
       ],
     },
@@ -158,25 +167,25 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: "suppliers",
       label: t("suppliers"),
       icon: <MdWork />,
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
     },
     {
       key: "cities",
       label: t("cities"),
       icon: <MdWork />,
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
     },
     {
       key: "zones",
       label: t("zones"),
       icon: <MdWork />,
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
     },
     {
       key: "employees",
       label: t("employees"),
       icon: <MdWork />,
-      allowed: true,
+      allowed: currentUser?.userType === "admin",
     },
     {
       key: "users-management", // Changed key
@@ -189,13 +198,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           key: "users",
           label: t("users"),
           icon: <MdWork />,
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
         },
         {
           key: "roles",
           label: t("roles"),
           icon: <MdWork />,
-          allowed: true,
+          allowed: currentUser?.userType === "admin",
         },
       ],
     },
@@ -254,7 +263,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="!min-w-[250px]"
+      className="lg:!min-w-[250px]"
     >
       <Menu
         className="border-none min-h-screen"

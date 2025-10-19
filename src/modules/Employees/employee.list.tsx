@@ -1,16 +1,32 @@
 import { useLoaderData, useNavigation, useRevalidator } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import Actions from "../../components/Actions";
-import type { EmployeeDataType, EmployeeResType } from "./employee.type";
+import type {
+  EmployeeDataType,
+  EmployeeResType,
+  SalaryFormUpdateType,
+} from "./employee.type";
 import DataGrid from "../../components/DataGrid";
 import Actions from "../../components/Actions";
 import type { ColumnsType } from "../../gloabal.type";
-
+import { Button, Form, Tooltip, type FormProps } from "antd";
+import { GiTakeMyMoney } from "react-icons/gi";
+import CModal from "../../components/CModal";
+import React from "react";
+import FormWrapper from "../../components/FormWrapper";
+import CInput from "../../components/CInput";
+import { putSalary } from "./employee.api";
 export default function Employees() {
   const data = useLoaderData() as EmployeeResType;
   const revalidator = useRevalidator();
+  const [openSalaryChangeModal, setOpenSalaryChangeModal] =
+    React.useState(false);
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const [currentEmploye, setCurrentEmploye] =
+    React.useState<EmployeeDataType | null>(null);
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const columns = [
     {
@@ -25,7 +41,9 @@ export default function Employees() {
       key: "phoneNumber",
       sorter: true,
       render: (row: EmployeeDataType) =>
-        `${row?.primaryPhone} - ${row?.secondaryPhone}`,
+        `${row?.primaryPhone}  ${
+          row?.secondaryPhone ? ` - ${row?.secondaryPhone}` : ""
+        }`,
     },
     {
       title: t("email"),
@@ -46,11 +64,43 @@ export default function Employees() {
         return (
           <div className="flex gap-2">
             <Actions id={row.id} hasShow={false} hasEdit />
+            <Tooltip title={t(`changeSalary`)} color="#003049">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenSalaryChangeModal(true);
+                  setCurrentEmploye(row);
+                }}
+              >
+                <GiTakeMyMoney size={24} />
+              </Button>
+            </Tooltip>
           </div>
         );
       },
     },
   ] as ColumnsType<EmployeeDataType>[];
+
+  const onFinish: FormProps<SalaryFormUpdateType>["onFinish"] = async (
+    formData: SalaryFormUpdateType
+  ) => {
+    try {
+      setIsLoading(true);
+      await putSalary<SalaryFormUpdateType>(formData, currentEmploye?.id || "");
+      revalidator.revalidate();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      console.error("Error creating LookingForInvestor:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onFinishFailed: FormProps<SalaryFormUpdateType>["onFinishFailed"] = (
+    errorInfo
+  ) => {
+    console.error("Failed:", errorInfo);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
@@ -63,6 +113,38 @@ export default function Employees() {
         }
         className="mt-4"
       />
+      <CModal
+        open={openSalaryChangeModal}
+        width={600}
+        setOpen={setOpenSalaryChangeModal}
+      >
+        <div className="p-3">
+          <FormWrapper<SalaryFormUpdateType>
+            title={t("changeSalary")}
+            form={form}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            initialValues={data}
+            isLoading={isLoading}
+          >
+            <p>
+              <span className="font-bold">{t("name")} :</span>
+              {currentEmploye?.firstName} {currentEmploye?.middleName}{" "}
+              {currentEmploye?.lastName}
+            </p>
+            <p>
+              <span className="font-bold">{t("currentSalary")} :</span>
+              {currentEmploye?.salary} IQD
+            </p>
+            <CInput<SalaryFormUpdateType>
+              name="newSalary"
+              label={t("newSalary")}
+              type="number"
+              rules={[{ required: true, message: t("requiredField") }]}
+            />
+          </FormWrapper>
+        </div>
+      </CModal>
     </div>
   );
 }

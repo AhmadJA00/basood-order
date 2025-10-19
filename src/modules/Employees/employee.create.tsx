@@ -92,7 +92,6 @@ const Create = () => {
           name="secondaryPhone"
           label={t("secondaryPhone")}
           className="flex-1"
-          rules={[{ required: true, message: t("requiredField") }]}
         />
       </Flex>
       <Flex justify="center" gap={"middle"} align="center">
@@ -130,22 +129,26 @@ const Create = () => {
             name="emgFirstName"
             className="flex-1"
             label={t("firstName")}
+            rules={[{ required: true, message: t("requiredField") }]}
           />
           <CInput<EmployeeDataType>
             className="flex-1"
             name="emgMiddleName"
             label={t("middleName")}
+            rules={[{ required: true, message: t("requiredField") }]}
           />
           <CInput<EmployeeDataType>
             className="flex-1"
             name="emgLastName"
             label={t("lastName")}
+            rules={[{ required: true, message: t("requiredField") }]}
           />
         </Flex>
         <Flex justify="center" gap={"middle"} align="center">
           <PhoneNumberInput
             name="emgPrimaryPhone"
             label={t("primaryPhone")}
+            rules={[{ required: true, message: t("requiredField") }]}
             className="flex-1"
           />
           <PhoneNumberInput

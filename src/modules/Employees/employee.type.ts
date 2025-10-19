@@ -21,3 +21,6 @@ export type EmployeeDataType = {
   emgSecondaryPhone: string;
   emgRelationShip: string;
 };
+export type SalaryFormUpdateType = {
+  newSalary: number;
+};

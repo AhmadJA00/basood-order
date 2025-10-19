@@ -111,7 +111,6 @@ const Create = () => {
   const onFinish: FormProps<OrderDataType>["onFinish"] = async (
     formData: OrderDataType
   ) => {
-    console.log({ ...formData, orderDetails: orders });
     try {
       setIsLoading(true);
       if (id) {

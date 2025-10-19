@@ -40,6 +40,12 @@ export async function putSupplierOrder<T>(data: T, id: string) {
     return request;
   }
 }
+export async function receivedOrderPending(id: string) {
+  {
+    const request = await HTTP.put(`/DriverOrder/ReceivedOrderPending/${id}`);
+    return request;
+  }
+}
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

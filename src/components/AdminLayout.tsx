@@ -11,16 +11,23 @@ export default function AdminLayout() {
   // const { userLoggedIn, userType } = useAuth() as AuthContextType;
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
-  const { userLoggedIn } = useAuth();
+  const userAuth = useAuth();
   const navgiate = useNavigate();
 
   React.useEffect(() => {
-    if (!userLoggedIn && pathname !== "/login") {
+    if (!userAuth.userLoggedIn && pathname !== "/login") {
       navgiate(`/login?prevRouter=${pathname}`);
     }
-  }, [userLoggedIn, pathname]);
+    if (
+      (userAuth.currentUser?.userType === "supplier" ||
+        userAuth.currentUser?.userType === "driver") &&
+      !pathname.includes("supplierOrders")
+    ) {
+      navgiate("/supplierOrders");
+    }
+  }, [userAuth.userLoggedIn, pathname]);
 
-  if (!userLoggedIn) {
+  if (!userAuth.userLoggedIn) {
     return null;
   }
   return (

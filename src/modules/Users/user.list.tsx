@@ -25,10 +25,22 @@ export default function List() {
 
   const columns = [
     {
-      title: t("title"),
-      key: "title",
+      title: t("fullName"),
+      key: "fullname",
       sorter: true,
-      render: (row: UserResDataType) => row.title,
+      render: (row: UserResDataType) => `${row.firstName} ${row.lastName}`,
+    },
+    {
+      title: t("username"),
+      key: "username",
+      sorter: true,
+      render: (row: UserResDataType) => row.username,
+    },
+    {
+      title: t("password"),
+      key: "password",
+      sorter: true,
+      render: (row: UserResDataType) => `${row?.firstName.trim()}7890@`,
     },
 
     {

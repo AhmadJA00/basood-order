@@ -38,7 +38,7 @@ const FormWrapper = <FieldType extends {} = any>({
           {title}
         </p>
       }
-      className="relative overflow-hidden"
+      className="relative overflow-hidden shadow-lg"
       styles={{
         header: {
           padding: "0px",

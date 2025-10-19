@@ -62,6 +62,7 @@ export type ColumnsType<T> = {
   title: string;
   key: string;
   dataIndex: string;
+  responsive: string[];
   sorter?: boolean;
   render?: (row: T) => React.ReactNode | React.ReactElement;
 };
@@ -89,3 +90,36 @@ export type InputName<T> =
         ? [K, keyof T[K]]
         : never;
     }[keyof T];
+
+export type ModalProps = {
+  children: React.ReactNode;
+  title?: React.ReactNode;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  width?: number;
+};
+export type ShowDataProp = {
+  label: string;
+  data: React.ReactNode;
+  vertical?: boolean;
+};
+export type OptionType = { value: number | string | boolean; label: string };
+export type OrderStatus =
+  | "OrderPending" // 1
+  | "DriverReceived" // 2
+  | "OfficeReceived" // 3
+  | "DriverPending" // 4
+  | "DriverPickUp" // 5
+  | "PostPone" // 6
+  | "PartiallyDelivered" // 7
+  | "Delivered" // 8
+  | "Cancelled" // 9
+  | "CancelledOfficeReceived" // 10
+  | "PartiallyCancelledOfficeReceived" // 11
+  | "CancelledDriverReceived" // 12
+  | "PartiallyCancelledDriverReceived" // 13
+  | "PaymentProcessing" // 14
+  | "PartiallyPaymentProcessing" // 15
+  | "CancelledSupplierReceived" // 16
+  | "PartiallyCancelledSupplierReceived" // 17
+  | "Completed"; // 18

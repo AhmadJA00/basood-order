@@ -1,7 +1,8 @@
 import type { gloabResponseType } from "../../gloabal.type";
 import type { DriverDataType } from "../Drivers/driver.type";
+import type { SupplierDataType } from "../Suppliers/supplier.type";
 
-export type SupplierOrderResType = gloabResponseType<SupplierOrderDataType>;
+export type SupplierOrderResType = gloabResponseType<SupplierOrderResDataType>;
 
 export type SupplierOrderDataType = {
   id: string;
@@ -14,6 +15,7 @@ export type SupplierOrderDataType = {
 };
 export type SupplierOrderResDataType = SupplierOrderDataType & {
   receivedByDriver: DriverDataType;
+  supplier: SupplierDataType;
   status: number;
 };
 

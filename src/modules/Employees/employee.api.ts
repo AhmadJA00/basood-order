@@ -36,6 +36,12 @@ export async function putEmployee<T>(data: T, id: string) {
     return request;
   }
 }
+export async function putSalary<T>(data: T, id: string) {
+  {
+    const request = await HTTP.post(`/Employee/ChangeSalary/${id}`, data);
+    return request;
+  }
+}
 export async function deleteEmployee(id: string) {
   {
     const request = await HTTP.put(`/Employee/DisableEnable/${id}`);

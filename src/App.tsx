@@ -184,7 +184,7 @@ const routes = createBrowserRouter(
             path="pending"
             element={<RenderRoute element={<OrderPendingCreate />} />}
           />
-        </Route>{" "}
+        </Route>
         <Route path="supplierOrders">
           <Route
             index

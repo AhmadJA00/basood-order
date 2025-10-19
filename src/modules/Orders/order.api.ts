@@ -73,3 +73,9 @@ export async function assignOrderToDriver(
     return request;
   }
 }
+export async function changeOrderStatus(id: string, status: number) {
+  {
+    const request = await HTTP.put(`/Order/status/${id}`, { status });
+    return request;
+  }
+}

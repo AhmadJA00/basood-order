@@ -16,4 +16,6 @@ export type OrderPendingDetailsType = {
   id: string;
   deliveryAmount: number;
   driverAmount: number;
+  productName?: string;
+  supplierName?: string;
 };

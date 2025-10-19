@@ -69,14 +69,7 @@ export default function Orderes() {
           navigation.state === "loading" || revalidator.state === "loading"
         }
         className="mt-4"
-      >
-        {" "}
-        <Flex align="center" justify="start">
-          <Button onClick={() => navigate("pending")} type="primary">
-            AssignSupplierOrders
-          </Button>
-        </Flex>
-      </DataGrid>
+      />
     </div>
   );
 }

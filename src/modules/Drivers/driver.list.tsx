@@ -5,12 +5,26 @@ import type { DriverDataType, DriverResType } from "./driver.type";
 import DataGrid from "../../components/DataGrid";
 import Actions from "../../components/Actions";
 import type { ColumnsType } from "../../gloabal.type";
+import { Button, Tooltip } from "antd";
+import { BiSolidUserAccount } from "react-icons/bi";
+import { createDriverAccount } from "./driver.api";
 
 export default function Driveres() {
   const data = useLoaderData() as DriverResType;
   const revalidator = useRevalidator();
   const { t } = useTranslation();
   const navigation = useNavigation();
+
+  const createAccount = async (id: string) => {
+    try {
+      if (id) {
+        await createDriverAccount(id);
+        revalidator.revalidate();
+      }
+    } catch (error) {
+      console.error("Error creating LookingForInvestor:", error);
+    }
+  };
 
   const columns = [
     {
@@ -39,7 +53,17 @@ export default function Driveres() {
       render: (row: DriverDataType) => {
         return (
           <div className="flex gap-2">
-            <Actions id={row.id} hasShow={false} hasEdit />
+            <Actions id={row.id} hasShow={false} hasEdit />{" "}
+            <Tooltip title={t(`createAccount`)} color="#003049">
+              <Button
+                type="primary"
+                onClick={() => {
+                  createAccount(row.id);
+                }}
+              >
+                <BiSolidUserAccount />
+              </Button>
+            </Tooltip>
           </div>
         );
       },

@@ -42,6 +42,12 @@ export async function deleteDriver(id: string) {
     return request;
   }
 }
+export async function createDriverAccount(id: string) {
+  {
+    const request = await HTTP.post(`/Driver/CreateUser/${id}`);
+    return request;
+  }
+}
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const pageSize = url.searchParams.get("pageSize") || "";
