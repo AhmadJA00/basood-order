@@ -27,6 +27,12 @@ import { IoPrintOutline } from "react-icons/io5";
 import { getDriver } from "../../Drivers/driver.api";
 import { getSupplier } from "../../Suppliers/supplier.api";
 import useNotification from "../../../hooks/useNotification";
+import { createPortal } from "react-dom";
+
+import PrintPreview from "../../../components/PrintPreview";
+import DriverOrderContent, { type OrderDriverContentPrintProps } from "../../../components/DriverOrderContent";
+import type { OrderSupplierContentPrintProps } from "../../../components/SupplierOrderContent";
+import SupplierOrderContent from "../../../components/SupplierOrderContent";
 
 export default function List() {
   const data = useLoaderData() as OrderDetailsResType;
@@ -40,6 +46,10 @@ export default function List() {
   );
   const [suppliers, setSuppliers] = React.useState<SupplierResType>();
   const [drivers, setDrivers] = React.useState<DriverResType>();
+
+  const [dataDriverPrint, setDataDriverPrint] = React.useState<OrderDriverContentPrintProps | null>();
+  const [dataSupplierPrint, setDataSupplierPrint] = React.useState<OrderSupplierContentPrintProps | null>();
+  const [opnePrintModal, setOpnePrintModal] = React.useState<boolean>(false);
 
   const [currentSupplier, setCurrentSupplier] =
     React.useState<SupplierDataType | null>(null);
@@ -130,19 +140,19 @@ export default function List() {
         }`}</p>
       ),
     },
-    {
-      title: t("action"),
-      key: "action",
-      render: (row: OrderDetailsDataType) => {
-        return (
-          <div className="flex gap-2">
-            <Button type="primary" icon={<IoPrintOutline />}>
-              {t("print")}
-            </Button>
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: t("action"),
+    //   key: "action",
+    //   render: (row: OrderDetailsDataType) => {
+    //     return (
+    //       <div className="flex gap-2">
+    //         <Button type="primary" icon={<IoPrintOutline />}>
+    //           {t("print")}
+    //         </Button>
+    //       </div>
+    //     );
+    //   },
+    // },
   ] as ColumnsType<OrderDetailsDataType>[];
   const [displayColumns, setDisplayColumns] =
     React.useState<ColumnsType<OrderDetailsDataType>[]>(columns);
@@ -188,6 +198,30 @@ export default function List() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
+     {createPortal(
+ <>
+      {opnePrintModal  && dataDriverPrint && 
+        <PrintPreview
+        title="ڕاپۆرتی شۆفێر"
+        content={<DriverOrderContent {...dataDriverPrint!} />}
+        fileName="Order_Report.pdf"
+        setOpen={setOpnePrintModal}
+      /> 
+      }
+
+      {opnePrintModal  && dataSupplierPrint && 
+        <PrintPreview
+        title="ڕاپۆرتی دوکاندار"
+        content={<SupplierOrderContent {...dataSupplierPrint!} />}
+        fileName="Order_Report.pdf"
+        setOpen={setOpnePrintModal}
+      /> 
+      }
+     </>
+     , document.body
+
+     )}
+
       <DataGrid<OrderDetailsDataType>
         title={t("OrderDetails")}
         columns={displayColumns}
@@ -315,6 +349,68 @@ export default function List() {
               placeholder="startdate"
             />
           </Flex>
+              <Button
+              
+              onClick={()=> {
+                if(data.items!.length > 0 && searchParams.get("driverId") &&
+              searchParams.get("fromDate") && searchParams.get("toDate")
+              )
+                {
+                  const printData : OrderDriverContentPrintProps  =
+                  {
+                    orderDetails : data.items,
+                    driver : `${data.items[0].order.driver.firstName} ${data.items[0].order.driver.middleName} ${data.items[0].order.driver.lastName}`,
+                    driverId : data.items[0].order.driver.id,
+                    fromCity : data.items[0].order.from.name,
+                    toCity : data.items[0].order.to.name,
+                    zone :  data.items[0].order.zone?.name ?? null, 
+             fromDate : searchParams.get("fromDate")!,
+                    toDate :  searchParams.get("toDate")!,
+                  } 
+                  setDataDriverPrint(printData);
+                  setDataSupplierPrint(null);
+                  setOpnePrintModal(true);
+                }
+                else {
+
+                  // Todo Add message to Here and Please add condtion for Select Driver in first If 
+                }
+
+              }}
+              
+              type="primary" icon={<IoPrintOutline />}>
+             {t("print")} 
+          </Button>
+
+           <Button
+              
+              onClick={()=> {
+                if(data.items!.length > 0 &&  searchParams.get("supplierId") &&
+              searchParams.get("fromDate") && searchParams.get("toDate"))
+                {
+                  const printData : OrderSupplierContentPrintProps  =
+                  {
+                    orderDetails : data.items,
+                    supplier : data.items[0].supplier.name,
+                    supplierId : data.items[0].supplier.id!,
+                      fromDate : searchParams.get("fromDate")!,
+                    toDate :  searchParams.get("toDate")!,
+                  } 
+                  
+                  setDataDriverPrint(null);
+                  setDataSupplierPrint(printData);
+                  setOpnePrintModal(true);
+                }
+                else {
+
+                  // Todo Add message to Here and Please add condtion for Select Driver in first If 
+                }
+
+              }}
+              
+              type="primary" icon={<IoPrintOutline />}>
+             {t("print")}  + Supplier
+          </Button>
         </Flex>
       </DataGrid>
       <CModal

@@ -2,25 +2,18 @@ import { View, Text, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import Rabar_022 from "../assets/fonts/Rabar_022.ttf";
 import React from "react";
 import QRCode from "qrcode";
+import type { OrderDetailsDataType } from "../modules/Orders/OrderDetails/orderdetails.type";
 
-export interface OrderDetail {
-  id: string | number;
-  productAmount: number;
-  supplierName: string | number;
-  supplierNumberPhone: string | number;
-  receiverNumberPhone: string;
-  address: string;
-  driverAmount: number;
-}
-
-export interface OrderContentProps {
-  id: string;
-  driver: string;
-  driverId: number | string;
-  fromCity: string;
-  toCity: string;
-  zone: string;
-  orderDetails: OrderDetail[];
+export interface OrderDriverContentPrintProps {
+  // id: string;
+  driver: string ;
+  driverId: number | string ;
+  fromCity: string ;
+  toCity: string ;
+  zone: string ;
+  orderDetails: OrderDetailsDataType[] ,
+  fromDate : string,
+  toDate : string,
 }
 
 const styles = StyleSheet.create({
@@ -61,6 +54,7 @@ const styles = StyleSheet.create({
   },
   total: {
     padding: 10,
+    paddingTop : 0,
     textAlign: "right",
     fontSize: 11,
     fontWeight: "bold",
@@ -81,61 +75,60 @@ const styles = StyleSheet.create({
   },
   qr: {
     position: "absolute",
-    top: -7,
+    top: -25,
     left: 0,
     width: 35,
     height: 35,
   },
 });
 
-const OrderContent = (data: OrderContentProps) => {
+const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
   Font.register({
     family: "Rabar_022",
     src: Rabar_022,
   });
 
-  const totalAmount = data.orderDetails.reduce(
+  const totalAmount = data.orderDetails!.reduce(
     (sum, item) => sum + item.productAmount + item.driverAmount,
     0
   );
 
-  const driverAmount = data.orderDetails.reduce(
+  const driverAmount = data.orderDetails!.reduce(
     (sum, item) => sum + item.driverAmount,
     0
   );
 
   interface Props {
-    driverId: number | string;
+    id: number | string;
   }
 
-  const DriverQRCode: React.FC<Props> = ({ driverId }) => {
+  const DriverQRCode: React.FC<Props> = ({ id }) => {
     const [qrCodeDataURL, setQrCodeDataURL] = React.useState<string>("");
 
     React.useEffect(() => {
-      const today = new Date().toISOString().split("T")[0];
-      const qrText = `driverId:${driverId}/date:${today}`;
+          const qrText = `driverId:${id}&fromDate:${data.fromDate}&toDate:${data.toDate}`;
 
       QRCode.toDataURL(qrText, { margin: 1, width: 120 })
         .then(setQrCodeDataURL)
         .catch(console.error);
-    }, [driverId]);
+    }, [id]);
 
     return (
       <>{qrCodeDataURL && <Image src={qrCodeDataURL} style={styles.qr} />}</>
     );
   };
 
-  const QRCodeGenerator: React.FC<Props> = ({ driverId }) => {
+  const QRCodeGenerator: React.FC<Props> = ({ id }) => {
     const [qrCodeDataURL, setQrCodeDataURL] = React.useState<string>("");
 
     React.useEffect(() => {
       const today = new Date().toISOString().split("T")[0];
-      const qrText = `driverId:${driverId}/date:${today}`;
+      const qrText = `driverId:${id}/date:${today}`;
 
       QRCode.toDataURL(qrText, { margin: 1, width: 120 })
         .then(setQrCodeDataURL)
         .catch(console.error);
-    }, [driverId]);
+    }, [id]);
 
     return (
       <>
@@ -151,10 +144,25 @@ const OrderContent = (data: OrderContentProps) => {
 
   return (
     <View>
-      <View style={{ ...styles.box1, marginBottom: 10 }}>
-        <DriverQRCode driverId={data.driverId} />
-        <View style={{ width: "5%" }}></View>
+      <View style={{  display : "flex" , flexDirection : "column" }}>
+        <View style={{ ...styles.box1  ,     paddingTop: 0,}}>
         <Text
+          style={{
+            fontSize: 11,
+            fontWeight: "bold",
+            fontFamily: "Rabar_022",
+            textAlign : "center",
+            width: "100%",
+          }}>
+         {data.toDate} {"-"} {data.fromDate}
+        </Text>
+      </View>
+
+              <View style={{ ...styles.box1, marginBottom: 5 }}>
+        <DriverQRCode id={data.driverId!} />
+        <View style={{ width: "5%" }}> </View>
+        { data.zone &&
+<Text
           style={{
             fontSize: 11,
             fontWeight: "bold",
@@ -164,6 +172,9 @@ const OrderContent = (data: OrderContentProps) => {
           ناوچە : {data.zone}
         </Text>
 
+        }
+       
+
         <Text
           style={{
             fontSize: 11,
@@ -171,13 +182,15 @@ const OrderContent = (data: OrderContentProps) => {
             fontFamily: "Rabar_022",
             width: "15%",
           }}>
-          گەیاندنی {data.fromCity} بۆ {data.toCity}
+          گەیاندنی  بۆ {data.toCity}
         </Text>
 
         <Text
           style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
           ناوی شۆفێر : {data.driver}
         </Text>
+      </View>
+
       </View>
       <View style={styles.table}>
         <View style={styles.headerRow}>
@@ -200,7 +213,7 @@ const OrderContent = (data: OrderContentProps) => {
           </View> */}
         </View>
 
-        {data.orderDetails.map((item, index) => (
+        {data.orderDetails!.map((item, index) => (
           <View
             wrap={false}
             style={{
@@ -216,8 +229,8 @@ const OrderContent = (data: OrderContentProps) => {
               }}>
               <Text style={{ ...styles.cell, width: 25 }}>{index + 1}</Text>
             </View>
-            <Text style={styles.cell}>{item.supplierName}</Text>
-            <Text style={styles.cell}>{item.supplierNumberPhone}</Text>
+            <Text style={styles.cell}>{item.supplier.name}</Text>
+            <Text style={styles.cell}>{item.supplier.primaryPhone}</Text>
 
             <Text style={styles.cell}>{item.productAmount.toFixed(2)}</Text>
             {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
@@ -256,4 +269,4 @@ const OrderContent = (data: OrderContentProps) => {
   );
 };
 
-export default OrderContent;
+export default DriverOrderContent;

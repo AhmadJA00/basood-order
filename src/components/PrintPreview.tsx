@@ -7,17 +7,18 @@ import {
   Image,
   StyleSheet,
   PDFViewer,
-  PDFDownloadLink,
   Font,
 } from "@react-pdf/renderer";
 import basood from "../assets/basood.png";
 import Rabar_015 from "../assets/fonts/Rabar_015.ttf";
+import useAuth from "../hooks/useAuth";
 
 interface PrintPreviewProps {
   title?: string;
   content: React.ReactNode | (() => React.ReactNode);
   orientation?: "portrait" | "landscape";
   fileName?: string;
+  setOpen : any
 }
 
 const PrintPreview: React.FC<PrintPreviewProps> = ({
@@ -25,6 +26,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
   content,
   orientation = "landscape",
   fileName = "document.pdf",
+  setOpen
 }) => {
   const styles = StyleSheet.create({
     page: {
@@ -103,6 +105,8 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
     src: Rabar_015,
   });
 
+  const userAuth = useAuth();
+
   const today = new Date();
   const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1)
     .toString()
@@ -128,7 +132,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
               flexDirection: "column",
             }}>
             <Text style={{ ...styles.headerText, fontSize: 11 }}>
-              {"Hana"} : بەکارهێنەر
+              {userAuth.currentUser?.username} : بەکارهێنەر
             </Text>
             <Text style={{ ...styles.headerText, fontSize: 11 }}>
               {formattedDate} : بەروار
@@ -170,7 +174,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
                 fontFamily: "Rabar_015",
                 width: "33.33%",
               }}>
-              0750 987 6543 - 0750 123 4567 : ژمارەی مۆبایل
+              0750 732 9696 - 0772 732 9696 : ژمارەی مۆبایل
             </Text>
             <Text
               style={{
@@ -189,24 +193,32 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
   );
 
   return (
-    <div className="p-4">
-      {/* Controls */}
-      <div style={styles.controls}>
-        <PDFDownloadLink
-          document={MyDocument}
-          fileName={fileName}
-          style={styles.button}>
-          {({ loading }) => (loading ? "Preparing..." : "Download PDF")}
-        </PDFDownloadLink>
-      </div>
 
-      {/* PDF Preview */}
-      <div style={styles.viewerWrapper}>
-        <PDFViewer width="100%" height="100%" showToolbar={true}>
-          {MyDocument}
-        </PDFViewer>
-      </div>
-    </div>
+     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+      onClick={() => setOpen(false)}
+     >
+          {/* Modal container */}
+          <div className="relative bg-white rounded-2xl shadow-2xl w-[90%] h-[90%] overflow-hidden">
+            {/* Close button */}
+            {/* <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(false)
+              }}
+              className="absolute top-3 right-3 text-black hover:text-red-500 transition"
+            >
+             X
+            </button> */}
+
+            {/* PDF Viewer */}
+            <div className="w-full h-full">
+              <PDFViewer width="100%" height="100%" showToolbar={true}>
+                {MyDocument}
+              </PDFViewer>
+            </div>
+          </div>
+        </div>
+
   );
 };
 
