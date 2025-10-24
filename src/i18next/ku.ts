@@ -1226,7 +1226,7 @@ const ku = {
     supplierPhoneNumber: "ژمارە مۆبایلی دابینکەر",
     isNewSupplier: "ئایا دابینکەری نوێیە؟",
     productName: "ناوی بەرهەم",
-    productAmount: "بڕی بەرهەم",
+    productAmount: "پارەی کاڵا",
     receiverNumberPhone: "ژمارە مۆبایلی وەرگر",
     invoiceNo: "ژمارەی پسووڵە",
     deliveryAmount: "بڕی پارەی گواستنەوە",
@@ -1249,7 +1249,10 @@ const ku = {
     isMale: "ئایا نێرە؟",
     update: "نوێکرد1نەوە",
     isToCustomer: "ئایا کار لەگەڵ موشتەری دەکات؟",
+    supplierOrders: "داواکاریەکانی کۆمپانیا",
+    iqd: "دینار",
+    login: "چوونەژوورەوە",
+    username: "ناوی بەکارهێنەر",
   },
 };
-
 export default ku;

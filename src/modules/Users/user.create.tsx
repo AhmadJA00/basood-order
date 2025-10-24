@@ -11,11 +11,15 @@ import type { RoleListDataType } from "./Roles/role.type";
 import { getRoleList } from "./Roles/role.api";
 import type { BranchListDataType } from "../Branches/branch.type";
 import { getBranchList } from "../Branches/branch.api";
+import useNotification from "../../hooks/useNotification";
+import helpers from "../../helpers";
 
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
+
   const [roles, setRoles] = React.useState<RoleListDataType[] | null>(null);
   const [branches, setBranches] = React.useState<BranchListDataType[] | null>(
     null
@@ -28,16 +32,26 @@ const Create = () => {
   const fetchRoles = async (signal: AbortSignal) => {
     try {
       setRoles(await getRoleList({ signal }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 
   const fetchBranches = async (signal: AbortSignal) => {
     try {
       setBranches(await getBranchList({ signal }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
   React.useEffect(() => {
@@ -69,7 +83,12 @@ const Create = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }

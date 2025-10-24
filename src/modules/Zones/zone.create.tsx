@@ -9,11 +9,14 @@ import type { ZoneDataType } from "./zone.type";
 import CSelect from "../../components/CSelect";
 import type { CityDataType, CityResType } from "../Cities/city.type";
 import { getCity } from "../Cities/city.api";
+import useNotification from "../../hooks/useNotification";
+import helpers from "../../helpers";
 
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
@@ -33,7 +36,12 @@ const Create = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -42,8 +50,13 @@ const Create = () => {
   const fetchCities = async (signal: AbortSignal) => {
     try {
       setCities(await getCity({ queryOBJ: {}, id: "", signal }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 
@@ -73,8 +86,8 @@ const Create = () => {
     >
       <CSelect<ZoneDataType>
         name="cityId"
-        label={t("selectAccount")}
-        placeholder={t("selectAccount")}
+        label={t("selectCity")}
+        placeholder={t("selectCity")}
         rules={[{ required: true, message: t("requiredField") }]}
         options={
           cities?.items?.map((city: CityDataType) => ({

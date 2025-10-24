@@ -72,8 +72,7 @@ const DataGrid = <T,>({
       <p className="text-3xl py-2 text-center">{title}</p>
       <div className="relative flex flex-col gap-5">
         <Loading isLoading={loading} />
-        {children}
-        <HeaderTable hasCreate={hasCreate} />
+        <HeaderTable hasCreate={hasCreate}>{children}</HeaderTable>
         <Table
           dataSource={data.items}
           columns={[
@@ -85,6 +84,7 @@ const DataGrid = <T,>({
             },
             ...columns,
           ]}
+          scroll={{ x: 1000 }}
           pagination={pagination}
           onChange={handleTableChange}
         />

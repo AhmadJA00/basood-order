@@ -19,7 +19,12 @@ export default function List() {
         revalidator.revalidate();
       }
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 

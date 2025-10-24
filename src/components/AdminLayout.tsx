@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Layout } from "antd";
 import Sidebar from "./Sidebar.tsx";
 import Navbar from "./Navbar.tsx";
 import useAuth from "../hooks/useAuth.ts";
+import ErrorBoundary from "antd/es/alert/ErrorBoundary";
 
 const { Content } = Layout;
 
@@ -32,13 +33,17 @@ export default function AdminLayout() {
   }
   return (
     <Layout>
-      <Sidebar collapsed={collapsed} />
-      <Layout>
-        <Navbar collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Content className="m-5 rounded-2xl shadow-lg p-5">
-          <Outlet />
-        </Content>
-      </Layout>
+      <ErrorBoundary>
+        <Suspense fallback={<h1>Loading User Profile...</h1>}>
+          <Sidebar collapsed={collapsed} />
+          <Layout>
+            <Navbar collapsed={collapsed} setCollapsed={setCollapsed} />
+            <Content className="m-5 rounded-2xl shadow-lg p-5">
+              <Outlet />
+            </Content>
+          </Layout>
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

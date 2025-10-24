@@ -24,6 +24,12 @@ export async function getDriver({ queryOBJ, id, signal }: LoaderGetFuncType) {
   }
 }
 
+export async function getCustomerDriver(signal: AbortSignal) {
+  {
+    const response = await HTTP.get("/Driver/ListDriverToCustomer", { signal });
+    return response.data;
+  }
+}
 export async function postDriver<T>(data: T) {
   {
     const request = await HTTP.post("/Driver", data);

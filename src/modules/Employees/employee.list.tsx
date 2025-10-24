@@ -16,9 +16,12 @@ import React from "react";
 import FormWrapper from "../../components/FormWrapper";
 import CInput from "../../components/CInput";
 import { putSalary } from "./employee.api";
+import helpers from "../../helpers";
+import useNotification from "../../hooks/useNotification";
 export default function Employees() {
   const data = useLoaderData() as EmployeeResType;
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
   const [openSalaryChangeModal, setOpenSalaryChangeModal] =
     React.useState(false);
   const { t } = useTranslation();
@@ -90,7 +93,12 @@ export default function Employees() {
       revalidator.revalidate();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }

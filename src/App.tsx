@@ -12,7 +12,6 @@ import NotFound from "./components/NotFound.tsx";
 import RenderRoute from "./components/RenderRoute.tsx";
 import AdminLayout from "./components/AdminLayout.tsx";
 import AuthProvider from "./providers/AuthProvider.tsx";
-import { NotificationProvider } from "./context/NotificationContext.tsx";
 import ThemeProvider from "./context/ThemeContext.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 
@@ -89,6 +88,10 @@ import { loader as ordersLoader } from "./modules/Orders/order.api.ts";
 const OrderPendingCreate = React.lazy(
   () => import("./modules/Orders/OrderPending/orderpending.create.tsx")
 );
+const OrderDetailsList = React.lazy(
+  () => import("./modules/Orders/OrderDetails/orderdetails.list.tsx")
+);
+import { loader as ordersDetailsLoader } from "./modules/Orders/OrderDetails/orderdetails.api.ts";
 
 const SupplierOrdersList = React.lazy(
   () => import("./modules/SupplierOrders/supplierorders.list.tsx")
@@ -111,11 +114,13 @@ const RolesCreate = React.lazy(
 import { loader as rolesLoader } from "./modules/Users/Roles/role.api.ts";
 
 import { useTranslation } from "react-i18next";
+import { NotificationProvider } from "./providers/NotificationProvider.tsx";
+import ErrorEle from "./components/ErrorEle.tsx";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<AdminLayout />}>
+      <Route path="/" element={<AdminLayout />} errorElement={<ErrorEle />}>
         <Route index element={<Dashboard />} />
         <Route path="branches">
           <Route
@@ -183,6 +188,11 @@ const routes = createBrowserRouter(
           <Route
             path="pending"
             element={<RenderRoute element={<OrderPendingCreate />} />}
+          />
+          <Route
+            path="order-details"
+            element={<RenderRoute element={<OrderDetailsList />} />}
+            loader={ordersDetailsLoader}
           />
         </Route>
         <Route path="supplierOrders">

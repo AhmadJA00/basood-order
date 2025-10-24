@@ -1,7 +1,6 @@
 // src/context/ThemeContext.tsx
 import { ConfigProvider, theme } from "antd";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { NotificationProvider } from "./NotificationContext";
 
 type ThemeContextType = {
   isDarkMode: boolean;
@@ -126,17 +125,15 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
-      <NotificationProvider>
-        <ConfigProvider
-          // theme={lightTheme}
-          theme={{
-            algorithm: defaultAlgorithm,
-            token: lightTheme,
-          }}
-        >
-          {children}
-        </ConfigProvider>
-      </NotificationProvider>
+      <ConfigProvider
+        // theme={lightTheme}
+        theme={{
+          algorithm: defaultAlgorithm,
+          token: lightTheme,
+        }}
+      >
+        {children}
+      </ConfigProvider>
     </ThemeContext.Provider>
   );
 };

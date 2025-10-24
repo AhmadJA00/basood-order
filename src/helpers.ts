@@ -1,4 +1,9 @@
-import type { OrderStatus, QueryValidationType } from "./gloabal.type";
+import type {
+  HelperFunctionErrorType,
+  ObjType,
+  OrderStatus,
+  QueryValidationType,
+} from "./gloabal.type";
 
 const helpers = {
   getStatus: (statusNumber: number): OrderStatus | null => {
@@ -62,8 +67,18 @@ const helpers = {
     { value: 18, label: "Completed" },
   ],
   queryValidation: (queryOBJ: QueryValidationType) => {
-    const { pageSize, currentPage, currentOrderBy, isAscending, search } =
-      queryOBJ;
+    const {
+      pageSize,
+      currentPage,
+      currentOrderBy,
+      isAscending,
+      search,
+      supplierId,
+      driverId,
+      status,
+      fromDate,
+      toDate,
+    } = queryOBJ;
 
     const urlSearchParams = new URLSearchParams();
 
@@ -96,6 +111,21 @@ const helpers = {
     ) {
       urlSearchParams.set("currentOrderBy", currentOrderBy);
     }
+    if (supplierId !== null && supplierId !== undefined && supplierId !== "") {
+      urlSearchParams.set("supplierId", supplierId);
+    }
+    if (driverId !== null && driverId !== undefined && driverId !== "") {
+      urlSearchParams.set("driverId", driverId);
+    }
+    if (status !== null && status !== undefined && status !== "") {
+      urlSearchParams.set("status", status);
+    }
+    if (fromDate !== null && fromDate !== undefined && fromDate !== "") {
+      urlSearchParams.set("fromDate", fromDate);
+    }
+    if (toDate !== null && toDate !== undefined && toDate !== "") {
+      urlSearchParams.set("toDate", toDate);
+    }
 
     return urlSearchParams;
   },
@@ -113,6 +143,32 @@ const helpers = {
       }
     }
     return "";
+  },
+  getErrorObjectKeyValue: (obj: ObjType) => {
+    const errArray: HelperFunctionErrorType[] = [];
+    for (const [key, value] of Object.entries(obj)) {
+      if (Array.isArray(value)) {
+        value.forEach((errorValue) => {
+          let errorMessage = "";
+
+          if (typeof errorValue === "object" && errorValue !== null) {
+            const nestedErrors = Object.values(errorValue);
+            errorMessage =
+              nestedErrors.length > 0
+                ? String(nestedErrors[0])
+                : "Unknown Error";
+          } else {
+            errorMessage = String(errorValue);
+          }
+
+          errArray.push({
+            label: key,
+            error: errorMessage,
+          });
+        });
+      }
+    }
+    return errArray;
   },
   setCookie: (name: string, value: string) => {
     const d = new Date();

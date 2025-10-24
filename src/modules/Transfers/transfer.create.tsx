@@ -9,11 +9,14 @@ import type { TransferDataType } from "./transfer.type";
 import CSelect from "../../components/CSelect";
 import type { CityDataType, CityResType } from "../Cities/city.type";
 import { getSafe } from "../Safes/safe.api";
+import useNotification from "../../hooks/useNotification";
+import helpers from "../../helpers";
 
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
@@ -33,7 +36,12 @@ const Create = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -42,8 +50,13 @@ const Create = () => {
   const fetchCities = async (signal: AbortSignal) => {
     try {
       setSafes(await getSafe({ queryOBJ: {}, id: "", signal }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 

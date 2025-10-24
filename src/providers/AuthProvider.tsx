@@ -11,7 +11,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     email: helpers.getCookie("email"),
     username: helpers.getCookie("username"),
     imageUrl: helpers.getCookie("imageurl"),
-    userType: helpers.getCookie("usertype"),
+    userType: helpers.getCookie("usertype") as "admin" | "supplier" | "driver",
   });
   const [userSeation, setUserSeation] = React.useState<UserSeation | null>({
     refreshToken: helpers.getCookie("refreshtoken"),
@@ -32,8 +32,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
           token: userSeation.refreshToken,
         });
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -54,8 +54,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       HTTP.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${res?.data?.token}`;
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log("error", error);
     }
   };
   React.useEffect(() => {

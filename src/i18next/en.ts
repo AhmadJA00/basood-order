@@ -1231,6 +1231,7 @@ const en = {
     ascending: "Ascending",
     descending: "Descending",
     noBrokersFound: "No Brokers Found",
+    iqd: "IQD",
   },
 };
 

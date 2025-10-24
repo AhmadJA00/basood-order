@@ -21,6 +21,7 @@ import { MdDeliveryDining } from "react-icons/md";
 import CShowData from "../../components/CShowData";
 import { IoMdPerson } from "react-icons/io";
 import type { SupplierDataType } from "../Suppliers/supplier.type";
+import useNotification from "../../hooks/useNotification";
 
 export default function SupplierOrderes() {
   const data = useLoaderData() as SupplierOrderResType;
@@ -37,6 +38,7 @@ export default function SupplierOrderes() {
   const [openSupplierInfoModal, setOpenSupplierInfoModal] =
     React.useState(false);
   const userAuth = useAuth();
+  const {openNotification} = useNotification()
 
   const asignOrderToDriverHandler = async (rowId: string, driverId: string) => {
     setIsLoading(true);
@@ -76,8 +78,13 @@ export default function SupplierOrderes() {
     if (userAuth.currentUser?.userType === "admin") {
       try {
         setDrivers(await getDriver({ queryOBJ: {}, id: "", signal }));
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
       }
     }
   };

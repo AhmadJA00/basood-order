@@ -5,12 +5,15 @@ import Actions, { DeleteButton } from "../../components/Actions";
 import { deleteZone } from "./zone.api";
 import type { ColumnsType } from "../../gloabal.type";
 import type { ZoneResDataType, ZoneResType } from "./zone.type";
+import helpers from "../../helpers";
+import useNotification from "../../hooks/useNotification";
 
 export default function List() {
   const data = useLoaderData() as ZoneResType;
   const revalidator = useRevalidator();
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { openNotification } = useNotification();
 
   const deleteFunction = async (id: string) => {
     try {
@@ -19,7 +22,12 @@ export default function List() {
         revalidator.revalidate();
       }
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 

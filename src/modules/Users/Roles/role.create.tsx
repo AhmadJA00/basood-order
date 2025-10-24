@@ -7,11 +7,15 @@ import CInput from "../../../components/CInput";
 import FormWrapper from "../../../components/FormWrapper";
 import type { Permission, RoleDataType } from "./role.type";
 import CSelect from "../../../components/CSelect";
+import helpers from "../../../helpers";
+import useNotification from "../../../hooks/useNotification";
 
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
+
   const [permissions, setPermissions] = React.useState<Permission[] | null>(
     null
   );
@@ -23,8 +27,13 @@ const Create = () => {
   const fetchPermissions = async (signal: AbortSignal) => {
     try {
       setPermissions(await getPermissions({ signal }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
   React.useEffect(() => {
@@ -49,7 +58,12 @@ const Create = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }

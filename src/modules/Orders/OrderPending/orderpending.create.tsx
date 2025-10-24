@@ -9,11 +9,11 @@ import type {
   OrderPendingDetailsType,
 } from "./orderpending.type";
 import type { SafeResDataType, SafeResType } from "../../Safes/safe.type";
-import type { DriverDataType, DriverResType } from "../../Drivers/driver.type";
+import type { CustomerDriverDataType } from "../../Drivers/driver.type";
 import type { CityDataType, CityResType } from "../../Cities/city.type";
 import type { ZoneDataType } from "../../Zones/zone.type";
 import { getSafe } from "../../Safes/safe.api";
-import { getDriver } from "../../Drivers/driver.api";
+import { getCustomerDriver } from "../../Drivers/driver.api";
 import { getCity } from "../../Cities/city.api";
 import { getZoneByCityId } from "../../Zones/zone.api";
 import { useWatch } from "antd/es/form/Form";
@@ -22,10 +22,12 @@ import helpers from "../../../helpers";
 import CInput from "../../../components/CInput";
 import type { SupplierOrderResDataType } from "../../SupplierOrders/supplierorders.type";
 import { MdDeleteOutline } from "react-icons/md";
+import useNotification from "../../../hooks/useNotification";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [orderForm] = Form.useForm();
+  const { openNotification } = useNotification();
 
   const [orders, setOrders] = React.useState<OrderPendingDetailsType[] | []>(
     []
@@ -34,12 +36,15 @@ const Create = () => {
     SupplierOrderResDataType[] | null
   >(null);
   const [safes, setSafes] = React.useState<SafeResType | null>(null);
-  const [drivers, setDrivers] = React.useState<DriverResType | null>(null);
+  const [drivers, setDrivers] = React.useState<CustomerDriverDataType[] | null>(
+    null
+  );
   const [cities, setCities] = React.useState<CityResType | null>(null);
   const [zones, setZones] = React.useState<ZoneDataType[] | null>(null);
 
   const fromId = useWatch(["fromId"], form);
   const toId = useWatch(["toId"], form);
+  const paymentTerm = useWatch(["paymentTerm"], form);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -100,7 +105,12 @@ const Create = () => {
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -127,11 +137,18 @@ const Create = () => {
   const fetchData = async (signal: AbortSignal) => {
     try {
       setSafes(await getSafe({ signal }));
-      setDrivers(await getDriver({ signal }));
+      setDrivers(await getCustomerDriver(signal));
+      console.log(await getCustomerDriver(signal));
       setCities(await getCity({ signal }));
       setSupplierOrders((await getSupplierOrderPending({ signal }))?.items);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
   const fetchZones = async (signal: AbortSignal) => {
@@ -139,8 +156,13 @@ const Create = () => {
       if (toId) {
         setZones(await getZoneByCityId({ id: toId, signal }));
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 
@@ -217,21 +239,8 @@ const Create = () => {
             className="flex-1"
             rules={[{ required: true, message: t("requiredField") }]}
             options={
-              drivers?.items?.map((driver: DriverDataType) => ({
-                label: `${driver.firstName} ${driver.middleName} ${driver.lastName}`,
-                value: driver.id,
-              })) || []
-            }
-          />
-          <CSelect<OrderPendingDataType>
-            name="safeId"
-            label={t("safe")}
-            placeholder={t("select")}
-            className="flex-1"
-            rules={[{ required: true, message: t("requiredField") }]}
-            options={
-              safes?.items?.map((driver: SafeResDataType) => ({
-                label: `${driver.name}`,
+              drivers?.map((driver: CustomerDriverDataType) => ({
+                label: `${driver.fullName}`,
                 value: driver.id,
               })) || []
             }
@@ -251,6 +260,21 @@ const Create = () => {
               ) || []
             }
           />
+          {paymentTerm === 1 && ( // only when it's prepaid
+            <CSelect<OrderDataType>
+              name="safeId"
+              label={t("safe")}
+              placeholder={t("select")}
+              className="flex-1"
+              rules={[{ required: true, message: t("requiredField") }]}
+              options={
+                safes?.items?.map((driver: SafeResDataType) => ({
+                  label: `${driver.name}`,
+                  value: driver.id,
+                })) || []
+              }
+            />
+          )}
         </Flex>{" "}
       </FormWrapper>
       <FormWrapper

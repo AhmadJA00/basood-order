@@ -39,12 +39,24 @@ export type AuthContextType = {
   setUserSeation: React.Dispatch<React.SetStateAction<UserSeation | null>>;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserData | null>>;
 };
+export type NotificationContextType = {
+  openNotification: (
+    type: "success" | "info" | "warning" | "error",
+    message: string,
+    description?: string
+  ) => void;
+};
 export type QueryValidationType = {
   pageSize?: string;
   currentPage?: string;
   currentOrderBy?: string;
   isAscending?: string;
   search?: string;
+  supplierId?: string;
+  driverId?: string;
+  status?: string;
+  fromDate: string;
+  toDate: string;
 };
 export type DataGridProps<T> = {
   children?: React.ReactNode;
@@ -123,3 +135,14 @@ export type OrderStatus =
   | "CancelledSupplierReceived" // 16
   | "PartiallyCancelledSupplierReceived" // 17
   | "Completed"; // 18
+
+type NestedFieldError = {
+  [index: string]: string;
+};
+
+type ErrorFieldObject = {
+  [fieldName: string]: (string | NestedFieldError)[];
+};
+
+export type ObjType = ErrorFieldObject;
+export type HelperFunctionErrorType = { label: string; error: string };

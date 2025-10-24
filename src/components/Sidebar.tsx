@@ -53,6 +53,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "orderPending":
         navigate("orders/pending");
         break;
+      case "orderDetails":
+        navigate("orders/order-details");
+        break;
       case "supplierOrders":
         navigate("supplierOrders");
         break;
@@ -115,6 +118,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         {
           key: "orderPending",
           label: t("orderPending"),
+          icon: <MdWork />,
+          // This item is only allowed if the userType is 'supplier'
+          allowed: currentUser?.userType === "admin",
+        },
+        {
+          key: "orderDetails",
+          label: t("orderDetails"),
           icon: <MdWork />,
           // This item is only allowed if the userType is 'supplier'
           allowed: currentUser?.userType === "admin",
@@ -259,12 +269,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const finalMenuItems = filterAllowedMenuItems(menuItems);
 
   return (
-    <Sider
-      trigger={null}
-      collapsible
-      collapsed={collapsed}
-      className="lg:!min-w-[250px]"
-    >
+    <Sider trigger={null} collapsible collapsed={collapsed}>
       <Menu
         className="border-none min-h-screen"
         // Consider setting a default open key for nested menus if needed

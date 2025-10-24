@@ -9,11 +9,14 @@ import FormWrapper from "../../components/FormWrapper";
 import PhoneNumberInput from "../../components/PhoneNumberInput";
 import CCard from "../../components/CCard";
 import CSwitch from "../../components/CSwitch";
+import helpers from "../../helpers";
+import useNotification from "../../hooks/useNotification";
 
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const revalidator = useRevalidator();
+  const { openNotification } = useNotification();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
@@ -33,7 +36,12 @@ const Create = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -95,13 +103,15 @@ const Create = () => {
         />
       </Flex>
       <Flex justify="center" gap={"middle"} align="center">
-        <CInput<EmployeeDataType>
-          name="salary"
-          label={t("salary")}
-          type="number"
-          className="flex-1"
-          rules={[{ required: true, message: t("requiredField") }]}
-        />
+        {!id && (
+          <CInput<EmployeeDataType>
+            name="salary"
+            label={t("salary")}
+            type="number"
+            className="flex-1"
+            rules={[{ required: true, message: t("requiredField") }]}
+          />
+        )}
         <CSwitch
           name="isMale"
           label={t("isMale")}
@@ -160,6 +170,7 @@ const Create = () => {
             name="emgRelationShip"
             label={t("emgRelationShip")}
             className="flex-1"
+            rules={[{ required: true, message: t("requiredField") }]}
           />
         </Flex>
       </CCard>

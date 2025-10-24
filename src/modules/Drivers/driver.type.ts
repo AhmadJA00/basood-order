@@ -19,3 +19,7 @@ export type DriverDataType = {
   emgRelationShip: string;
   isToCustomer: boolean;
 };
+export type CustomerDriverDataType = {
+  id: string;
+  fullName: string;
+};

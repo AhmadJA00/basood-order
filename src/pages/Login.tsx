@@ -8,6 +8,8 @@ import type { LoginType } from "../gloabal.type";
 import helpers from "../helpers";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import useNotification from "../hooks/useNotification";
+import { useTranslation } from "react-i18next";
 
 type FieldType = {
   email?: string;
@@ -18,6 +20,8 @@ const Login: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = React.useState(false);
   const { setCurrentUser, setUserSeation, setUserLoggedIn } = useAuth();
+  const { openNotification } = useNotification();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
@@ -80,34 +84,41 @@ const Login: React.FC = () => {
           new URLSearchParams(window.location.search).get("prevRouter") || "/"
         );
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     } finally {
       setIsLoading(false);
     }
   };
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo
-  ) => {};
+  ) => {
+    console.log(errorInfo);
+  };
 
   return (
     <div className="w-screen h-screen bg-gradient-to-br  from-primary-light to-primary ">
       <div className="max-w-lg mx-auto min-h-screen flex flex-col justify-center">
         <FormWrapper
-          title="Login"
+          title={t("login")}
           form={form}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           isLoading={isLoading}
         >
           <CInput<LoginType>
-            label="username"
+            label={t("username")}
             name="username"
             rules={[{ required: true, message: "Please input your email!" }]}
           />
           <CInput<LoginType>
+            label={t("password")}
             type="password"
-            label="Password"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           />

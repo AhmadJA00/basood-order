@@ -22,7 +22,12 @@ export default function Driveres() {
         revalidator.revalidate();
       }
     } catch (error) {
-      console.error("Error creating LookingForInvestor:", error);
+      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          openNotification("error", err.label, err.error as string);
+        });
+      }
     }
   };
 
@@ -39,7 +44,9 @@ export default function Driveres() {
       key: "phoneNumber",
       sorter: true,
       render: (row: DriverDataType) =>
-        `${row?.primaryPhone} - ${row?.secondaryPhone}`,
+        `${row?.primaryPhone} ${
+          row.secondaryPhone ? `- ${row?.secondaryPhone}` : ""
+        }`,
     },
     {
       title: t("driverLicense"),

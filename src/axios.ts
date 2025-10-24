@@ -23,7 +23,6 @@ HTTP.interceptors.request.use(
   function (config) {
     const currentToken = helpers.getCookie("token");
     const isAuthRequired = config.url !== "/user/login";
-
     if (isAuthRequired && !currentToken) {
       console.error(
         "⛔️ Interceptor Blocked: Authentication token is missing."

@@ -6,7 +6,7 @@ export type SupplierOrderResType = gloabResponseType<SupplierOrderResDataType>;
 
 export type SupplierOrderDataType = {
   id: string;
-  productName: string;
+  productName?: string;
   productAmount: number;
   receiverNumberPhone: string;
   address: string;
