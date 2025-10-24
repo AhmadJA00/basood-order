@@ -4,8 +4,21 @@ import type {
   OrderStatus,
   QueryValidationType,
 } from "./gloabal.type";
+import JsBarcode from "jsbarcode";
 
 const helpers = {
+  generateBarcode: (text: string) => {
+    const canvas = document.createElement("canvas");
+    JsBarcode(canvas, text, {
+      format: "CODE128",
+      displayValue: true,
+      fontSize: 16,
+      textMargin: 2,
+      height: 30,
+      width: 2,
+    });
+    return canvas.toDataURL("image/png");
+  },
   getStatus: (statusNumber: number): OrderStatus | null => {
     if (statusNumber === 1) {
       return "OrderPending";
@@ -47,24 +60,28 @@ const helpers = {
     return null;
   },
   orderStatus: [
-    { value: 1, label: "OrderPending" },
-    { value: 2, label: "DriverReceived" },
-    { value: 3, label: "OfficeReceived" },
-    { value: 4, label: "DriverPending" },
-    { value: 5, label: "DriverPickUp" },
-    { value: 6, label: "PostPone" },
-    { value: 7, label: "PartiallyDelivered" },
-    { value: 8, label: "Delivered" },
-    { value: 9, label: "Cancelled" },
-    { value: 10, label: "CancelledOfficeReceived" },
-    { value: 11, label: "PartiallyCancelledOfficeReceived" },
-    { value: 12, label: "CancelledDriverReceived" },
-    { value: 13, label: "PartiallyCancelledDriverReceived" },
-    { value: 14, label: "PaymentProcessing" },
-    { value: 15, label: "PartiallyPaymentProcessing" },
-    { value: 16, label: "CancelledSupplierReceived" },
-    { value: 17, label: "PartiallyCancelledSupplierReceived" },
-    { value: 18, label: "Completed" },
+    { value: 1, label: "OrderPending", color: "#FFA500" },
+    { value: 2, label: "DriverReceived", color: "#007BFF" },
+    { value: 3, label: "OfficeReceived", color: "#0056B3" },
+    { value: 4, label: "DriverPending", color: "#17A2B8" },
+    { value: 5, label: "DriverPickUp", color: "#20C997" },
+    { value: 6, label: "PostPone", color: "#6C757D" },
+    { value: 7, label: "PartiallyDelivered", color: "#FFC107" },
+    { value: 8, label: "Delivered", color: "#28A745" },
+    { value: 9, label: "Cancelled", color: "#DC3545" },
+    { value: 10, label: "CancelledOfficeReceived", color: "#C82333" },
+    { value: 11, label: "PartiallyCancelledOfficeReceived", color: "#E4606D" },
+    { value: 12, label: "CancelledDriverReceived", color: "#B21F2D" },
+    { value: 13, label: "PartiallyCancelledDriverReceived", color: "#E57373" },
+    { value: 14, label: "PaymentProcessing", color: "#6610F2" },
+    { value: 15, label: "PartiallyPaymentProcessing", color: "#9B59B6" },
+    { value: 16, label: "CancelledSupplierReceived", color: "#E74C3C" },
+    {
+      value: 17,
+      label: "PartiallyCancelledSupplierReceived",
+      color: "#F1948A",
+    },
+    { value: 18, label: "Completed", color: "#198754" },
   ],
   queryValidation: (queryOBJ: QueryValidationType) => {
     const {
