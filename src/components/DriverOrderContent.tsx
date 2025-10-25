@@ -89,7 +89,7 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
   });
 
   const totalAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.productAmount + item.driverAmount,
+    (sum, item) => sum + item.productAmount + item.deliveryAmount,
     0
   );
 
@@ -236,7 +236,7 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
             <Text style={styles.cell}>{item.supplier.name}</Text>
             <Text style={styles.cell}>{item.supplier.primaryPhone}</Text>
 
-            <Text style={styles.cell}>{item.productAmount.toFixed(2)}</Text>
+            <Text style={styles.cell}>{(item.productAmount + item.deliveryAmount).toFixed(2)}</Text>
             {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
             <Text style={styles.cell}>{item.driverAmount.toFixed(2)}</Text>
             {/* <Text

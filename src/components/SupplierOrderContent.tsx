@@ -88,7 +88,7 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
   });
 
   const totalAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.productAmount + item.driverAmount,
+    (sum, item) => sum + item.productAmount,
     0
   );
 
