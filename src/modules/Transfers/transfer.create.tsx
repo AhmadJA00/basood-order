@@ -85,7 +85,7 @@ const Create = () => {
     >
       <CSelect<TransferDataType>
         name="fromId"
-        label={t("selectSafeBox")}
+        label={t("fromSafebox")}
         placeholder={t("selectSafeBox")}
         rules={[{ required: true, message: t("requiredField") }]}
         options={
@@ -100,7 +100,7 @@ const Create = () => {
       />
       <CSelect<TransferDataType>
         name="toId"
-        label={t("selectSafeBox")}
+        label={t("toSafebox")}
         placeholder={t("selectSafeBox")}
         rules={[{ required: true, message: t("requiredField") }]}
         options={

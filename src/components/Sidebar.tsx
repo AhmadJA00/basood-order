@@ -63,6 +63,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "suppliers":
         navigate("suppliers");
         break;
+      case "payments":
+        navigate("suppliers/payments");
+        break;
       case "transactions":
         navigate("drivers/transactions");
         break;
@@ -190,10 +193,24 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       ],
     },
     {
-      key: "suppliers",
+      key: "suppliers-group",
       label: t("suppliers"),
       icon: <MdWork />,
       allowed: currentUser?.userType === "admin",
+      children: [
+        {
+          key: "suppliers",
+          label: t("suppliers"),
+          icon: <MdWork />,
+          allowed: currentUser?.userType === "admin",
+        },
+        {
+          key: "payments",
+          label: t("payments"),
+          icon: <MdWork />,
+          allowed: currentUser?.userType === "admin",
+        },
+      ],
     },
     {
       key: "cities",

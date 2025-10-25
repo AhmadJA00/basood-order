@@ -198,5 +198,9 @@ const helpers = {
     { value: 1, label: "prePaid" },
     { value: 2, label: "loan" },
   ],
+  payerType: [
+    { value: 1, label: "SendByDriver" },
+    { value: 2, label: "ReceivedAtOffice" },
+  ],
 };
 export default helpers;

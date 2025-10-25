@@ -1232,6 +1232,10 @@ const en = {
     descending: "Descending",
     noBrokersFound: "No Brokers Found",
     iqd: "IQD",
+    makeSureYouHaveSelectedDriverIdFromDateToDate:
+      "Make sure you have selected Driver Id, from Date and to Date",
+    makeSureYouHaveSelectedSupplierIdFromDateToDate:
+      "Make sure you have selected Supplier Id, from Date and to Date",
   },
 };
 

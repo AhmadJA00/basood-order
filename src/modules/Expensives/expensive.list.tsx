@@ -5,12 +5,15 @@ import Actions, { DeleteButton } from "../../components/Actions";
 import { deleteExpensive } from "./expensive.api";
 import type { ColumnsType } from "../../gloabal.type";
 import type { ExpensiveResDataType } from "./expensive.type";
+import useNotification from "../../hooks/useNotification";
+import helpers from "../../helpers";
 
 export default function List() {
   const data = useLoaderData() as ExpensiveResDataType;
   const revalidator = useRevalidator();
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { openNotification } = useNotification();
 
   const deleteFunction = async (id: string) => {
     try {
@@ -36,10 +39,10 @@ export default function List() {
       render: (row: ExpensiveResDataType) => row.amount,
     },
     {
-      title: t("city"),
-      key: "city",
+      title: t("safe"),
+      key: "safe",
       sorter: true,
-      render: (row: ExpensiveResDataType) => row?.safe,
+      render: (row: ExpensiveResDataType) => row?.safe.name,
     },
     {
       title: t("reason"),

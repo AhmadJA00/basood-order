@@ -1,4 +1,5 @@
 import type { gloabResponseType } from "../../gloabal.type";
+import type { SafeDataType } from "../Safes/safe.type";
 
 export type ExpensiveResType = gloabResponseType<ExpensiveResDataType>;
 
@@ -12,6 +13,5 @@ export type ExpensiveResDataType = {
   id: string;
   amount: number;
   reason: string;
-  safeId: string;
-  safe: string;
+  safe: SafeDataType;
 };

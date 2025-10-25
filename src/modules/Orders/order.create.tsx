@@ -158,7 +158,8 @@ const Create = () => {
           <Button type="primary" onClick={() => handleEdit(row)}>
             <EditOutlined size={20} />
           </Button>
-          <Tooltip title={t(`changeSalary`)} color="#003049">
+          {}
+          <Tooltip title={t(`changeDriverAmount`)} color="#003049">
             <Button
               type="primary"
               onClick={() => {

@@ -30,7 +30,9 @@ import useNotification from "../../../hooks/useNotification";
 import { createPortal } from "react-dom";
 
 import PrintPreview from "../../../components/PrintPreview";
-import DriverOrderContent, { type OrderDriverContentPrintProps } from "../../../components/DriverOrderContent";
+import DriverOrderContent, {
+  type OrderDriverContentPrintProps,
+} from "../../../components/DriverOrderContent";
 import type { OrderSupplierContentPrintProps } from "../../../components/SupplierOrderContent";
 import SupplierOrderContent from "../../../components/SupplierOrderContent";
 
@@ -47,8 +49,10 @@ export default function List() {
   const [suppliers, setSuppliers] = React.useState<SupplierResType>();
   const [drivers, setDrivers] = React.useState<DriverResType>();
 
-  const [dataDriverPrint, setDataDriverPrint] = React.useState<OrderDriverContentPrintProps | null>();
-  const [dataSupplierPrint, setDataSupplierPrint] = React.useState<OrderSupplierContentPrintProps | null>();
+  const [dataDriverPrint, setDataDriverPrint] =
+    React.useState<OrderDriverContentPrintProps | null>();
+  const [dataSupplierPrint, setDataSupplierPrint] =
+    React.useState<OrderSupplierContentPrintProps | null>();
   const [opnePrintModal, setOpnePrintModal] = React.useState<boolean>(false);
 
   const [currentSupplier, setCurrentSupplier] =
@@ -59,38 +63,6 @@ export default function List() {
   const [currentDrivers, setCurrentDrivers] =
     React.useState<DriverDataType | null>(null);
   const [openDriverInfoModal, setOpenDriverInfoModal] = React.useState(false);
-
-  // 💥 NEW STATE: To track selected rows 💥
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
-  const [selectedRows, setSelectedRows] = React.useState<
-    OrderDetailsDataType[]
-  >([]);
-
-  // Function to handle logging the selected data
-  const handleLogSelected = () => {
-    console.log("--- Selected Row Data ---");
-    // Log the actual data objects
-    selectedRows.forEach((row) => console.log(row));
-    // Or log just the IDs
-    // console.log('Selected Keys:', selectedRowKeys);
-  };
-
-  // 💥 Row Selection Configuration Object 💥
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (
-      newSelectedRowKeys: React.Key[],
-      newSelectedRows: OrderDetailsDataType[]
-    ) => {
-      // Update state when selection changes
-      setSelectedRowKeys(newSelectedRowKeys);
-      setSelectedRows(newSelectedRows);
-    },
-    // Optional: Add logic for row selection behavior (e.g., disable certain rows)
-    // getCheckboxProps: (record: OrderDetailsDataType) => ({
-    //   disabled: record.status === 'Completed',
-    // }),
-  };
 
   const columns = [
     {
@@ -230,29 +202,28 @@ export default function List() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
-     {createPortal(
- <>
-      {opnePrintModal  && dataDriverPrint && 
-        <PrintPreview
-        title="ڕاپۆرتی شۆفێر"
-        content={<DriverOrderContent {...dataDriverPrint!} />}
-        fileName="Order_Report.pdf"
-        setOpen={setOpnePrintModal}
-      /> 
-      }
+      {createPortal(
+        <>
+          {opnePrintModal && dataDriverPrint && (
+            <PrintPreview
+              title="ڕاپۆرتی شۆفێر"
+              content={<DriverOrderContent {...dataDriverPrint!} />}
+              fileName="Order_Report.pdf"
+              setOpen={setOpnePrintModal}
+            />
+          )}
 
-      {opnePrintModal  && dataSupplierPrint && 
-        <PrintPreview
-        title="ڕاپۆرتی دوکاندار"
-        content={<SupplierOrderContent {...dataSupplierPrint!} />}
-        fileName="Order_Report.pdf"
-        setOpen={setOpnePrintModal}
-      /> 
-      }
-     </>
-     , document.body
-
-     )}
+          {opnePrintModal && dataSupplierPrint && (
+            <PrintPreview
+              title="ڕاپۆرتی دوکاندار"
+              content={<SupplierOrderContent {...dataSupplierPrint!} />}
+              fileName="Order_Report.pdf"
+              setOpen={setOpnePrintModal}
+            />
+          )}
+        </>,
+        document.body
+      )}
 
       <DataGrid<OrderDetailsDataType>
         title={t("OrderDetails")}
@@ -381,67 +352,68 @@ export default function List() {
               placeholder="startdate"
             />
           </Flex>
-              <Button
-              
-              onClick={()=> {
-                if(data.items!.length > 0 && searchParams.get("driverId") &&
-              searchParams.get("fromDate") && searchParams.get("toDate")
-              )
-                {
-                  const printData : OrderDriverContentPrintProps  =
-                  {
-                    orderDetails : data.items,
-                    driver : `${data.items[0].order.driver.firstName} ${data.items[0].order.driver.middleName} ${data.items[0].order.driver.lastName}`,
-                    driverId : data.items[0].order.driver.id,
-                    fromCity : data.items[0].order.from.name,
-                    toCity : data.items[0].order.to.name,
-                    zone :  data.items[0].order.zone?.name ?? null, 
-             fromDate : searchParams.get("fromDate")!,
-                    toDate :  searchParams.get("toDate")!,
-                  } 
-                  setDataDriverPrint(printData);
-                  setDataSupplierPrint(null);
-                  setOpnePrintModal(true);
-                }
-                else {
-
-                  // Todo Add message to Here and Please add condtion for Select Driver in first If 
-                }
-
-              }}
-              
-              type="primary" icon={<IoPrintOutline />}>
-             {t("print")} 
+          <Button
+            onClick={() => {
+              if (
+                data.items!.length > 0 &&
+                searchParams.get("driverId") &&
+                searchParams.get("fromDate") &&
+                searchParams.get("toDate")
+              ) {
+                const printData: OrderDriverContentPrintProps = {
+                  orderDetails: data.items,
+                  driver: `${data.items[0].order.driver.firstName} ${data.items[0].order.driver.middleName} ${data.items[0].order.driver.lastName}`,
+                  driverId: data.items[0].order.driver.id,
+                  fromCity: data.items[0].order.from.name,
+                  toCity: data.items[0].order.to.name,
+                  zone: data.items[0].order.zone?.name ?? null,
+                  fromDate: searchParams.get("fromDate")!,
+                  toDate: searchParams.get("toDate")!,
+                };
+                setDataDriverPrint(printData);
+                setDataSupplierPrint(null);
+                setOpnePrintModal(true);
+              } else {
+                openNotification(
+                  "warning",
+                  t("makeSureYouHaveSelectedDriverIdFromDateToDate")
+                );
+              }
+            }}
+          >
+            {t("print")}
           </Button>
 
-           <Button
-              
-              onClick={()=> {
-                if(data.items!.length > 0 &&  searchParams.get("supplierId") &&
-              searchParams.get("fromDate") && searchParams.get("toDate"))
-                {
-                  const printData : OrderSupplierContentPrintProps  =
-                  {
-                    orderDetails : data.items,
-                    supplier : data.items[0].supplier.name,
-                    supplierId : data.items[0].supplier.id!,
-                      fromDate : searchParams.get("fromDate")!,
-                    toDate :  searchParams.get("toDate")!,
-                  } 
-                  
-                  setDataDriverPrint(null);
-                  setDataSupplierPrint(printData);
-                  setOpnePrintModal(true);
-                }
-                else {
+          <Button
+            onClick={() => {
+              if (
+                data.items!.length > 0 &&
+                searchParams.get("supplierId") &&
+                searchParams.get("fromDate") &&
+                searchParams.get("toDate")
+              ) {
+                const printData: OrderSupplierContentPrintProps = {
+                  orderDetails: data.items,
+                  supplier: data.items[0].supplier.name,
+                  supplierId: data.items[0].supplier.id!,
+                  fromDate: searchParams.get("fromDate")!,
+                  toDate: searchParams.get("toDate")!,
+                };
 
-                  // Todo Add message to Here and Please add condtion for Select Driver in first If 
-                }
-
-              }}
-              
-              type="primary" icon={<IoPrintOutline />}>
-             {t("print")}  + Supplier
+                setDataDriverPrint(null);
+                setDataSupplierPrint(printData);
+                setOpnePrintModal(true);
+              } else {
+                openNotification(
+                  "warning",
+                  t("makeSureYouHaveSelectedSupplierIdFromDateToDate")
+                );
+              }
+            }}
+            type="primary"
+            icon={<IoPrintOutline />}
+          >
+            {t("print")} + Supplier
           </Button>
         </Flex>
       </DataGrid>

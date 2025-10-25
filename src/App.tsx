@@ -39,6 +39,14 @@ const SuppliersCreate = React.lazy(
 );
 import { loader as suppliersLoader } from "./modules/Suppliers/supplier.api.ts";
 
+const PaymentsList = React.lazy(
+  () => import("./modules/Suppliers/Payments/payment.list.tsx")
+);
+const PaymentsCreate = React.lazy(
+  () => import("./modules/Suppliers/Payments/payment.create.tsx")
+);
+import { loader as paymentsLoader } from "./modules/Suppliers/Payments/payment.api.ts";
+
 const SafesList = React.lazy(() => import("./modules/Safes/safe.list.tsx"));
 const SafesCreate = React.lazy(() => import("./modules/Safes/safe.create.tsx"));
 import { loader as safesLoader } from "./modules/Safes/safe.api.ts";
@@ -250,6 +258,23 @@ const routes = createBrowserRouter(
             element={<RenderRoute element={<SuppliersCreate />} />}
             loader={suppliersLoader}
           />
+
+          <Route path="payments">
+            <Route
+              index
+              element={<RenderRoute element={<PaymentsList />} />}
+              loader={paymentsLoader}
+            />
+            <Route
+              path="create"
+              element={<RenderRoute element={<PaymentsCreate />} />}
+            />
+            <Route
+              path="edit/:id"
+              element={<RenderRoute element={<PaymentsCreate />} />}
+              loader={paymentsLoader}
+            />
+          </Route>
         </Route>
 
         <Route path="accountant">

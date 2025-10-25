@@ -1253,6 +1253,10 @@ const ku = {
     iqd: "دینار",
     login: "چوونەژوورەوە",
     username: "ناوی بەکارهێنەر",
+    makeSureYouHaveSelectedDriverIdFromDateToDate:
+      "دڵنیابەرەوە کە شۆفێر، بەرواری سەرەتا و کۆتایت هەڵبژاردووە پێش چاپکردن",
+    makeSureYouHaveSelectedSupplierIdFromDateToDate:
+      "دڵنیابەرەوە کە بازرگان، بەرواری سەرەتا و کۆتایت هەڵبژاردووە پێش چاپکردن",
   },
 };
 export default ku;
