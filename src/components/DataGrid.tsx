@@ -74,7 +74,7 @@ const DataGrid = <T,>({
         <Loading isLoading={loading} />
         <HeaderTable hasCreate={hasCreate}>{children}</HeaderTable>
         <Table
-          dataSource={data.items}
+          dataSource={data.items.map((data) => ({ key: data.id, ...data }))}
           columns={[
             {
               title: "id",

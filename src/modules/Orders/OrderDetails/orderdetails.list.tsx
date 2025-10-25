@@ -50,6 +50,38 @@ export default function List() {
     React.useState<DriverDataType | null>(null);
   const [openDriverInfoModal, setOpenDriverInfoModal] = React.useState(false);
 
+  // 💥 NEW STATE: To track selected rows 💥
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
+  const [selectedRows, setSelectedRows] = React.useState<
+    OrderDetailsDataType[]
+  >([]);
+
+  // Function to handle logging the selected data
+  const handleLogSelected = () => {
+    console.log("--- Selected Row Data ---");
+    // Log the actual data objects
+    selectedRows.forEach((row) => console.log(row));
+    // Or log just the IDs
+    // console.log('Selected Keys:', selectedRowKeys);
+  };
+
+  // 💥 Row Selection Configuration Object 💥
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (
+      newSelectedRowKeys: React.Key[],
+      newSelectedRows: OrderDetailsDataType[]
+    ) => {
+      // Update state when selection changes
+      setSelectedRowKeys(newSelectedRowKeys);
+      setSelectedRows(newSelectedRows);
+    },
+    // Optional: Add logic for row selection behavior (e.g., disable certain rows)
+    // getCheckboxProps: (record: OrderDetailsDataType) => ({
+    //   disabled: record.status === 'Completed',
+    // }),
+  };
+
   const columns = [
     {
       title: t("supplier"),

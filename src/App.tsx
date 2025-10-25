@@ -71,6 +71,14 @@ const DriversCreate = React.lazy(
 );
 import { loader as driversLoader } from "./modules/Drivers/driver.api.ts";
 
+const TransactionsList = React.lazy(
+  () => import("./modules/Drivers/Transactions/transaction.list.tsx")
+);
+const TransactionsCreate = React.lazy(
+  () => import("./modules/Drivers/Transactions/transaction.create.tsx")
+);
+import { loader as transactionsLoader } from "./modules/Drivers/Transactions/transaction.api.ts";
+
 const EmployeesList = React.lazy(
   () => import("./modules/Employees/employee.list.tsx")
 );
@@ -153,6 +161,22 @@ const routes = createBrowserRouter(
             element={<RenderRoute element={<DriversCreate />} />}
             loader={driversLoader}
           />
+          <Route path="transactions">
+            <Route
+              index
+              element={<RenderRoute element={<TransactionsList />} />}
+              loader={transactionsLoader}
+            />
+            <Route
+              path="create"
+              element={<RenderRoute element={<TransactionsCreate />} />}
+            />
+            <Route
+              path="edit/:id"
+              element={<RenderRoute element={<TransactionsCreate />} />}
+              loader={transactionsLoader}
+            />
+          </Route>
         </Route>
         <Route path="cities">
           <Route
@@ -227,6 +251,7 @@ const routes = createBrowserRouter(
             loader={suppliersLoader}
           />
         </Route>
+
         <Route path="accountant">
           <Route path="safes">
             <Route

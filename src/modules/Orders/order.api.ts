@@ -36,6 +36,15 @@ export async function putOrder<T>(data: T, id: string) {
     return request;
   }
 }
+export async function putDriverAmount<T>(data: T, id: string) {
+  {
+    const request = await HTTP.put(
+      `/DriverOrder/DriverChangeAmount/${id}`,
+      data
+    );
+    return request;
+  }
+}
 export async function deleteOrder(id: string) {
   {
     const request = await HTTP.put(`/Order/DisableEnable/${id}`);

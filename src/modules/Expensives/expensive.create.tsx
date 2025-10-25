@@ -49,7 +49,7 @@ const Create = () => {
 
   const fetchCities = async (signal: AbortSignal) => {
     try {
-      setSafes(await getSafe({ queryOBJ: {}, id: "", signal }));
+      setSafes(await getSafe({ signal }));
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

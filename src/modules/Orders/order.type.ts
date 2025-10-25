@@ -53,3 +53,4 @@ export type OrderResDataType = {
   totalOrder: number;
   paymentTerm: 1 | 2;
 };
+export type ChangeDriverAmountFormType = { amount: number };

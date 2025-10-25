@@ -77,7 +77,7 @@ export default function SupplierOrderes() {
   const fetchData = async (signal: AbortSignal) => {
     if (userAuth.currentUser?.userType === "admin") {
       try {
-        setDrivers(await getDriver({ queryOBJ: {}, id: "", signal }));
+        setDrivers(await getDriver({ signal }));
       } catch (error) {
         const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

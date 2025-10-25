@@ -1,10 +1,33 @@
-import { Button, Flex, Form, Modal, Select, Table, type FormProps } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Modal,
+  Select,
+  Table,
+  Tooltip,
+  type FormProps,
+} from "antd";
 import { IoEyeOutline } from "react-icons/io5";
-import type { OrderDataType, OrderDetailsType } from "./order.type";
+import type {
+  ChangeDriverAmountFormType,
+  OrderDataType,
+  OrderDetailsType,
+} from "./order.type";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useNavigate, useParams } from "react-router";
-import { changeOrderStatus, postOrder, putOrder } from "./order.api";
+import {
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useRevalidator,
+} from "react-router";
+import {
+  changeOrderStatus,
+  postOrder,
+  putDriverAmount,
+  putOrder,
+} from "./order.api";
 import FormWrapper from "../../components/FormWrapper";
 import type { CityDataType, CityResType } from "../Cities/city.type";
 import { getCity } from "../Cities/city.api";
@@ -27,12 +50,19 @@ import CInput from "../../components/CInput";
 import PhoneNumberInput from "../../components/PhoneNumberInput";
 import { MdDeleteOutline } from "react-icons/md";
 import useNotification from "../../hooks/useNotification";
+import CModal from "../../components/CModal";
+import { GiTakeMyMoney } from "react-icons/gi";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [orderForm] = Form.useForm();
   const { openNotification } = useNotification();
   const navigate = useNavigate();
+  const [openChangeDriverPrice, setOpenChangeDriverPrice] =
+    React.useState(false);
+  const [currentOrder, setCurrentOrder] =
+    React.useState<OrderDetailsType | null>(null);
+  const revalidator = useRevalidator();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
@@ -128,6 +158,17 @@ const Create = () => {
           <Button type="primary" onClick={() => handleEdit(row)}>
             <EditOutlined size={20} />
           </Button>
+          <Tooltip title={t(`changeSalary`)} color="#003049">
+            <Button
+              type="primary"
+              onClick={() => {
+                setOpenChangeDriverPrice(true);
+                setCurrentOrder(row);
+              }}
+            >
+              <GiTakeMyMoney size={24} />
+            </Button>
+          </Tooltip>
           {!id && (
             <Button danger type="primary" onClick={() => deleteOrder(index)}>
               <MdDeleteOutline size={20} />
@@ -211,12 +252,41 @@ const Create = () => {
   ) => {
     console.error("Failed:", errorInfo);
   };
+
+  const onFinishChangeAmount: FormProps<ChangeDriverAmountFormType>["onFinish"] =
+    async (formData: ChangeDriverAmountFormType) => {
+      try {
+        setIsLoading(true);
+        await putDriverAmount<ChangeDriverAmountFormType>(
+          formData,
+          currentOrder?.id || ""
+        );
+        revalidator.revalidate();
+        setOpenChangeDriverPrice(false);
+      } catch (error) {
+        const errors = helpers.getErrorObjectKeyValue(
+          error.response.data.errors
+        );
+        if (errors.length > 0) {
+          errors.forEach((err) => {
+            openNotification("error", err.label, err.error as string);
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+  const onFinishFailedChangeAmount: FormProps<ChangeDriverAmountFormType>["onFinishFailed"] =
+    (errorInfo) => {
+      console.error("Failed:", errorInfo);
+    };
   const fetchData = async (signal: AbortSignal) => {
     try {
-      setSafes(await getSafe({ queryOBJ: {}, id: "", signal }));
+      setSafes(await getSafe({ signal }));
       setDrivers(await getCustomerDriver(signal));
-      setCities(await getCity({ queryOBJ: {}, id: "", signal }));
-      setSuppliers(await getSupplier({ queryOBJ: {}, id: "", signal }));
+      setCities(await getCity({ signal }));
+      setSuppliers(await getSupplier({ signal }));
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {
@@ -489,6 +559,45 @@ const Create = () => {
       >
         {isLoading ? t("processing") : id ? t("update") : t("submit")}
       </Button>{" "}
+      <CModal
+        open={openChangeDriverPrice}
+        width={600}
+        setOpen={setOpenChangeDriverPrice}
+      >
+        <div className="p-3">
+          <FormWrapper<ChangeDriverAmountFormType>
+            title={t("changeDriverAmount")}
+            form={form}
+            onFinish={onFinishChangeAmount}
+            onFinishFailed={onFinishFailedChangeAmount}
+            initialValues={data}
+            isLoading={isLoading}
+          >
+            <p>
+              <span className="font-bold">{t("name")} :</span>
+              {currentOrder?.supplierName}
+            </p>
+            <p>
+              <span className="font-bold">{t("productAmount")} :</span>
+              {currentOrder?.productAmount} {t("iqd")}
+            </p>
+            <p>
+              <span className="font-bold">{t("deliveryAmount")} :</span>
+              {currentOrder?.deliveryAmount} {t("iqd")}
+            </p>
+            <p>
+              <span className="font-bold">{t("driverAmount")} :</span>
+              {currentOrder?.driverAmount} {t("iqd")}
+            </p>
+            <CInput<ChangeDriverAmountFormType>
+              name="amount"
+              label={t("newDriverAmount")}
+              type="number"
+              rules={[{ required: true, message: t("requiredField") }]}
+            />
+          </FormWrapper>
+        </div>
+      </CModal>
       <Modal
         title={t("detailedOrderData")}
         open={openModal}

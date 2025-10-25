@@ -55,8 +55,8 @@ export type QueryValidationType = {
   supplierId?: string;
   driverId?: string;
   status?: string;
-  fromDate: string;
-  toDate: string;
+  fromDate?: string;
+  toDate?: string;
 };
 export type DataGridProps<T> = {
   children?: React.ReactNode;

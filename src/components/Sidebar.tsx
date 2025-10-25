@@ -8,6 +8,7 @@ import { CgLogOut } from "react-icons/cg";
 import { Layout } from "antd";
 import useAuth from "../hooks/useAuth";
 import type { ItemType } from "antd/es/menu/interface";
+import { FaCodeBranch } from "react-icons/fa6";
 
 type SidebarProps = {
   collapsed: boolean;
@@ -62,6 +63,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "suppliers":
         navigate("suppliers");
         break;
+      case "transactions":
+        navigate("drivers/transactions");
+        break;
       case "safes":
         navigate("accountant/safes");
         break;
@@ -93,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       key: "branches",
       label: t("branches"),
-      icon: <MdWork />,
+      icon: <FaCodeBranch />,
       allowed: currentUser?.userType === "admin", // Example: Always allowed
     },
     {
@@ -135,17 +139,29 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: "supplierOrders",
       label: t("supplierOrders"),
       icon: <MdWork />,
-      // This item is only allowed if the userType is 'supplier'
       allowed:
         currentUser?.userType === "supplier" ||
         currentUser?.userType === "driver",
     },
-    // ... rest of your items
     {
-      key: "drivers",
+      key: "drivers-group",
       label: t("drivers"),
       icon: <MdWork />,
       allowed: currentUser?.userType === "admin",
+      children: [
+        {
+          key: "drivers",
+          label: t("drivers"),
+          icon: <MdWork />,
+          allowed: currentUser?.userType === "admin",
+        },
+        {
+          key: "transactions",
+          label: t("transactions"),
+          icon: <MdWork />,
+          allowed: currentUser?.userType === "admin",
+        },
+      ],
     },
     {
       key: "accountant",
