@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   qr: {
     position: "absolute",
-    top: -25,
+    top: -32,
     left: 0,
     width: 35,
     height: 35,
@@ -160,14 +160,13 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
 
               <View style={{ ...styles.box1, marginBottom: 5 }}>
         <DriverQRCode id={data.driverId!} />
-        <View style={{ width: "5%" }}> </View>
         { data.zone &&
 <Text
           style={{
             fontSize: 11,
             fontWeight: "bold",
             fontFamily: "Rabar_022",
-            width: "15%",
+            width: "33.33%",
           }}>
           ناوچە : {data.zone}
         </Text>
@@ -180,13 +179,18 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
             fontSize: 11,
             fontWeight: "bold",
             fontFamily: "Rabar_022",
-            width: "15%",
+            width : "33.34%" ,
+            textAlign : "center"
           }}>
           گەیاندنی  بۆ {data.toCity}
         </Text>
 
         <Text
-          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022" }}>
+          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022"
+            , width : "33.33%"
+            , textAlign : "right"
+
+           }}>
           ناوی شۆفێر : {data.driver}
         </Text>
       </View>

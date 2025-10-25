@@ -218,7 +218,7 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
             </Text>
                  <Text style={styles.cell}>{item.receiverNumberPhone}</Text>
 
-                 {item.invoiceNo ? <Image style={{...styles.cell}} source={generateBarcode(item.invoiceNo)} /> : 
+                 {item.invoiceNo ? <Image style={{...styles.cell}} source={generateBarcode(item.invoiceNo ,index % 2 === 0 ? "#ffffff" : "#f7f7f7" )} /> : 
                  <Text style={styles.cell}></Text>
                  }
                
