@@ -87,13 +87,13 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
     src: Rabar_022,
   });
 
-  const totalAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.productAmount,
+  const totalPrice = data.orderDetails!.reduce(
+    (sum, item) => sum + item.productPrice,
     0
   );
 
-  const driverAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.driverAmount,
+  const driverPrice = data.orderDetails!.reduce(
+    (sum, item) => sum + item.driverPrice,
     0
   );
 
@@ -201,9 +201,9 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
             <Text style={styles.cell}>{item.productName}</Text>
             {/* <Text style={styles.cell}>{item.supplier.primaryPhone}</Text> */}
 
-            <Text style={styles.cell}>{item.productAmount.toFixed(2)}</Text>
-            {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
-            {/* <Text style={styles.cell}>{item.driverAmount.toFixed(2)}</Text> */}
+            <Text style={styles.cell}>{item.productPrice.toFixed(2)}</Text>
+            {/* <Text style={styles.cell}>{item.deliveryPrice.toFixed(2)}</Text> */}
+            {/* <Text style={styles.cell}>{item.driverPrice.toFixed(2)}</Text> */}
             <Text
               style={{
                 ...styles.cell,
@@ -214,9 +214,9 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
                 marginTop: 3,
                 height: 20,
               }}>
-              {helpers.orderStatus.find((e) => e.value === item.status)?.label}
+              {helpers.orderStatus.find((e) => e.value === item.status)?.labelKu}
             </Text>
-                 <Text style={styles.cell}>{item.receiverNumberPhone}</Text>
+                 <Text style={styles.cell}>{item.receiverPrimaryNumber} | {item.receiverPrimaryNumber ?? ""}</Text>
 
                  {item.invoiceNo ? <Image style={{...styles.cell}} source={generateBarcode(item.invoiceNo ,index % 2 === 0 ? "#ffffff" : "#f7f7f7" )} /> : 
                  <Text style={styles.cell}></Text>
@@ -236,8 +236,8 @@ const SupplierOrderContent = (data: OrderSupplierContentPrintProps) => {
       </View>
 
       <View style={styles.total}>
-        <Text>کۆی گشتی : {totalAmount.toFixed(2)} دینار</Text>
-        {/* <Text>نرخی گەیاندنی شۆفێر : {driverAmount.toFixed(2)} دینار</Text> */}
+        <Text>کۆی گشتی : {totalPrice.toFixed(2)} دینار</Text>
+        {/* <Text>نرخی گەیاندنی شۆفێر : {driverPrice.toFixed(2)} دینار</Text> */}
       </View>
     </View>
   );

@@ -21,7 +21,8 @@ export type OrderDetailsDataType = {
   neighborhood: NeighborhoodResDataType;
   productPrice: number;
   productName?: string;
-  receiverNumberPhone: string;
+  receiverPrimaryNumber: string;
+  receiverSecondaryNumber?: string;
   remark: string;
   status: number;
   supplier: SupplierResDataType;

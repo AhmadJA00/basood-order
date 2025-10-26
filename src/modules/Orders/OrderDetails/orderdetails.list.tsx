@@ -35,6 +35,7 @@ import DriverOrderContent, {
 } from "../../../components/DriverOrderContent";
 import type { OrderSupplierContentPrintProps } from "../../../components/SupplierOrderContent";
 import SupplierOrderContent from "../../../components/SupplierOrderContent";
+import PrintMiniPreview from "../../../components/PrintMiniPreview";
 
 export default function List() {
   const data = useLoaderData() as OrderDetailsResType;
@@ -49,11 +50,10 @@ export default function List() {
   const [suppliers, setSuppliers] = React.useState<SupplierResType>();
   const [drivers, setDrivers] = React.useState<DriverResType>();
 
-  const [dataDriverPrint, setDataDriverPrint] =
-    React.useState<OrderDriverContentPrintProps | null>();
-  const [dataSupplierPrint, setDataSupplierPrint] =
-    React.useState<OrderSupplierContentPrintProps | null>();
-  const [opnePrintModal, setOpnePrintModal] = React.useState<boolean>(false);
+
+      const [printData, setPrintData] =
+    React.useState<OrderSupplierContentPrintProps | OrderDriverContentPrintProps | string[] | null >();
+  const [opnePrintModal, setOpnePrintModal] = React.useState<"sup" | "dir" | "qr" | null>(null);
 
   const [currentSupplier, setCurrentSupplier] =
     React.useState<SupplierDataType | null>(null);
@@ -204,20 +204,28 @@ export default function List() {
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
       {createPortal(
         <>
-          {opnePrintModal && dataDriverPrint && (
+          {opnePrintModal === "dir" && printData as OrderDriverContentPrintProps && (
             <PrintPreview
               title="ڕاپۆرتی شۆفێر"
-              content={<DriverOrderContent {...dataDriverPrint!} />}
+              content={<DriverOrderContent {...printData as OrderDriverContentPrintProps} />}
               fileName="Order_Report.pdf"
               setOpen={setOpnePrintModal}
             />
           )}
 
-          {opnePrintModal && dataSupplierPrint && (
+          {opnePrintModal === "sup" && printData as OrderSupplierContentPrintProps && (
             <PrintPreview
               title="ڕاپۆرتی دوکاندار"
-              content={<SupplierOrderContent {...dataSupplierPrint!} />}
+              content={<SupplierOrderContent {...printData as OrderSupplierContentPrintProps} />}
               fileName="Order_Report.pdf"
+              setOpen={setOpnePrintModal}
+            />
+          )}
+
+           {opnePrintModal === "qr" && printData as string[] && (
+            <PrintMiniPreview
+              title="کۆد"
+              ids={printData as string[]}
               setOpen={setOpnePrintModal}
             />
           )}
@@ -369,9 +377,9 @@ export default function List() {
                   fromDate: searchParams.get("fromDate")!,
                   toDate: searchParams.get("toDate")!,
                 };
-                setDataDriverPrint(printData);
-                setDataSupplierPrint(null);
-                setOpnePrintModal(true);
+
+                setPrintData(printData);
+                setOpnePrintModal("dir");
               } else {
                 openNotification(
                   "warning",
@@ -382,6 +390,7 @@ export default function List() {
           >
             {t("print")}
           </Button>
+          
 
           <Button
             onClick={() => {
@@ -399,9 +408,8 @@ export default function List() {
                   toDate: searchParams.get("toDate")!,
                 };
 
-                setDataDriverPrint(null);
-                setDataSupplierPrint(printData);
-                setOpnePrintModal(true);
+                setPrintData(printData);
+                setOpnePrintModal("sup");
               } else {
                 openNotification(
                   "warning",
@@ -413,6 +421,35 @@ export default function List() {
             icon={<IoPrintOutline />}
           >
             {t("print")} + Supplier
+          </Button>
+
+          <Button
+            onClick={() => {
+                const printData: string[]  = [
+  "bdbdc1df-a449-4f54-acf1-536fc78cd4e9",
+  "36bc53c9-32bb-40fc-80a6-7e37f44627fb",
+  "f484a9f9-a794-4048-8bbc-10b150a3964e",
+  "e7684fc7-1dec-4b75-9221-3d5dde67d27e",
+  "b662e2ea-5ffe-4dfd-8b2d-62479ab381c6",
+  "d4b5c947-081d-44e0-84a5-8acbaff2a787",
+  "783cf0c6-ad16-4f08-bc68-95b6b2e92777",
+  "6a833b69-8757-46b7-9cf8-f34cb30038c3",
+  "191ea2ea-199f-4830-8ccc-78e802d8a34a",
+  "3a10c035-52c9-465f-88c5-34fded299d9b",
+  "4de604e8-4c0c-43d2-9d7e-b8a3f18fa4c2",
+  "b4f386d4-475e-4c20-bdb6-86b47c285287",
+  "6f254f58-0195-4cb6-871d-3457619d157a",
+  "13685ebd-f970-4809-a069-b4d97f642133",
+  "d02f06da-b608-4d85-b80b-0b1feab8dc9c"
+]
+
+                setPrintData(printData);
+                setOpnePrintModal("qr");
+            }}
+            type="primary"
+            icon={<IoPrintOutline />}
+          >
+            {t("print")} + QrCode
           </Button>
         </Flex>
       </DataGrid>

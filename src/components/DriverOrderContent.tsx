@@ -3,6 +3,7 @@ import Rabar_022 from "../assets/fonts/Rabar_022.ttf";
 import React from "react";
 import QRCode from "qrcode";
 import type { OrderDetailsDataType } from "../modules/Orders/OrderDetails/orderdetails.type";
+import { data } from "react-router";
 
 export interface OrderDriverContentPrintProps {
   // id: string;
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "bold",
     fontFamily: "Rabar_022",
-    width: "50%",
+    width: "65%",
     flexDirection: "row",
     display: "flex",
     justifyContent: "space-between",
@@ -81,19 +82,24 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
   Font.register({
     family: "Rabar_022",
     src: Rabar_022,
   });
 
-  const totalAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.productAmount + item.deliveryAmount,
+  console.log("data::" , data);
+
+
+  const totalPrice = data.orderDetails!.reduce(
+    (sum, item) => sum + item.productPrice + item.deliveryPrice,
     0
   );
 
-  const driverAmount = data.orderDetails!.reduce(
-    (sum, item) => sum + item.driverAmount,
+  const driverPrice = data.orderDetails!.reduce(
+    (sum, item) => sum + item.driverPrice,
     0
   );
 
@@ -241,10 +247,10 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
             <Text style={styles.cell}>{item.supplier.primaryPhone}</Text>
 
             <Text style={styles.cell}>
-              {(item.productAmount + item.deliveryAmount).toFixed(2)}
+              {(item.productPrice + item.deliveryPrice).toFixed(2)}
             </Text>
-            {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
-            <Text style={styles.cell}>{item.driverAmount.toFixed(2)}</Text>
+            {/* <Text style={styles.cell}>{item.deliveryPrice.toFixed(2)}</Text> */}
+            <Text style={styles.cell}>{item.driverPrice.toFixed(2)}</Text>
             {/* <Text
               style={{
                 ...styles.cell,
@@ -257,7 +263,7 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
               }}>
               {OrderStatus.find((e) => e.id === item.status)?.kurdish}
             </Text> */}
-            <Text style={styles.cell}>{item.receiverNumberPhone}</Text>
+            <Text style={styles.cell}>{item.receiverPrimaryNumber} | {item.receiverPrimaryNumber ?? ""}</Text>
 
             <Text style={styles.cell}>{item.address}</Text>
             {/* <View
@@ -272,8 +278,8 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
       </View>
 
       <View style={styles.total}>
-        <Text>کۆی گشتی : {totalAmount.toFixed(2)} دینار</Text>
-        <Text>نرخی گەیاندنی شۆفێر : {driverAmount.toFixed(2)} دینار</Text>
+        <Text>کۆی گشتی : {totalPrice.toFixed(2)} دینار</Text>
+        <Text>نرخی شۆفێر : {driverPrice.toFixed(2)} دینار</Text>
       </View>
     </View>
   );

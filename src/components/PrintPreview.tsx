@@ -195,7 +195,7 @@ const PrintPreview: React.FC<PrintPreviewProps> = ({
   return (
 
      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
-      onClick={() => setOpen(false)}
+      onClick={() => setOpen(null)}
      >
           {/* Modal container */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-[90%] h-[90%] overflow-hidden">

@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  PDFViewer,
-  Font,
-} from "@react-pdf/renderer";
+import { PDFViewer, Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
+
 import Rabar_015 from "../assets/fonts/Rabar_015.ttf";
 import QRCode from "qrcode";
 
@@ -25,74 +17,27 @@ const PrintMiniPreview: React.FC<PrintPreviewProps> = ({
 }) => {
   const styles = StyleSheet.create({
     page: {
-      paddingHorizontal: 20,
-      paddingTop: 20,
-      paddingBottom: 45,
-      fontSize: 12,
+      paddingHorizontal: 1,
+      paddingTop: 1,
+      paddingBottom: 1,
+      fontSize: 1,
     },
     header: {
-      position: "absolute",
-      top: 10,
-      left: 20,
-      right: 20,
-      height: 40,
-      flexDirection: "row",
+      display : "flex",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "space-between",
-      borderBottom: "1px solid #f0f0f0",
     },
-    logo: {
-      width: 50,
-      height: 40,
-    },
+
     headerText: {
-      fontSize: 14,
+      fontSize: 4,
       fontWeight: "bold",
       fontFamily: "Rabar_015",
     },
-    footer: {
-      position: "absolute",
-      bottom: 10,
-      left: 20,
-      right: 20,
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      borderTop: "1px solid #f0f0f0",
-      paddingTop: 5,
-    },
-    pageNumber: {
-      fontSize: 12,
-      color: "grey",
-    },
-    content: {
-      marginTop: 40,
-      padding: 5,
-    },
-    viewerWrapper: {
-      width: "100%",
-      height: "85vh",
-      border: "1px solid #ddd",
-      borderRadius: 8,
-      overflow: "hidden",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    },
-    controls: {
-      display: "flex",
-      justifyContent: "flex-end",
-      marginBottom: 10,
-      gap: 10,
-    },
-    button: {
-      backgroundColor: "#2563eb",
-      color: "white",
-      border: "none",
-      borderRadius: 5,
-      padding: "6px 12px",
-      cursor: "pointer",
-      fontSize: 14,
-    },
-    title: {},
+
+
+
+    
   });
 
   Font.register({
@@ -116,7 +61,7 @@ const PrintMiniPreview: React.FC<PrintPreviewProps> = ({
         {qrCodeDataURL && (
           <Image
             src={qrCodeDataURL}
-            style={{ width: 31, height: 31, marginVertical: 3 }}
+            style={{ width: 25, height: 25 }}
           />
         )}
       </>
@@ -124,53 +69,60 @@ const PrintMiniPreview: React.FC<PrintPreviewProps> = ({
   };
 
 
-  // Inner PDF Document component
-  const MyDocument = (
-    <Document
+
+  return (
+
+     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+      onClick={() => setOpen(null)}
+     >
+          <div className="relative bg-white rounded-2xl shadow-2xl w-[90%] h-[90%] overflow-hidden">
+
+            <div className="w-full h-full">
+              <PDFViewer width="100%" height="100%" showToolbar={true}>
+                 <Document
       title={title}
       author=""
       subject=""
       keywords=""
       creator="react-pdf"
       producer="react-pdf">
-      <Page orientation={"portrait"} size={{width : 4, height : 5.8}} style={styles.page}>
-      {ids.map((e: string, index: number) => (
-  <View key={index} style={{ ...styles.header }}>
-    <Text style={styles.headerText}>بەسود پۆست</Text>
+      <Page orientation={"portrait"} size={{width : 40, height : 58}} style={styles.page}>
+{ids.map((e: string, index: number) => {
+  return (
 
+    <View key={index} style={{ ...styles.header }}>
+      <Text style={styles.headerText}>بەسود پۆست</Text>
+
+         
     <View
-      style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <QRCodeGenerator id={e} />
+                      style={{
+                        width: "100%",
+                        display : "flex",
+                        alignItems : "center",
+                      }}>
+                      <QRCodeGenerator id={e} />
+                    </View>
 
-      <Text style={{ ...styles.headerText, fontSize: 11 }}>
-        : ناونیشان وەرگر
-      </Text>
 
-      <Text style={{ ...styles.headerText, fontSize: 11 }}>
-        : عنون للمستلم
-      </Text>
-    </View>
-  </View>
-))}
+    <Text style={{ ...styles.headerText, fontSize: 2  , marginTop : 2}}>
+
+      {e}
+        </Text>
+        <Text style={{ ...styles.headerText, fontSize: 3 , marginVertical : 2 }}>
+          : ناونیشان وەرگر
+        </Text>
+
+        <Text style={{ ...styles.headerText, fontSize: 3 }}>
+          : عنون للمستلم
+        </Text>
+      </View>
+  );
+
+})}
+
 
       </Page>
     </Document>
-  );
-
-  return (
-
-     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
-      onClick={() => setOpen(false)}
-     >
-          <div className="relative bg-white rounded-2xl shadow-2xl w-[90%] h-[90%] overflow-hidden">
-
-            <div className="w-full h-full">
-              <PDFViewer width="100%" height="100%" showToolbar={true}>
-                {MyDocument}
               </PDFViewer>
             </div>
           </div>

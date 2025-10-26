@@ -79,7 +79,7 @@ export default function List() {
               <Button
                 type="primary"
                 onClick={() => {
-                  createAccount(row.accountId);
+                  createAccount(row.id);
                 }}
               >
                 <BiSolidUserAccount />
