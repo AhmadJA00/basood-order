@@ -6,7 +6,7 @@ import { HTTP } from "../../../axios";
 
 export async function getOrderDetails({ queryOBJ, signal }: LoaderGetFuncType) {
   const urlSearchParams = queryOBJ ? helpers.queryValidation(queryOBJ) : {};
-  let url = "/Order/OrderDetails?";
+  let url = "/Order/OrderReport?";
 
   url = url.concat(urlSearchParams.toString());
 

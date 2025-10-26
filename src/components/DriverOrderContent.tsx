@@ -8,7 +8,6 @@ export interface OrderDriverContentPrintProps {
   // id: string;
   driver: string;
   driverId: number | string;
-  fromCity: string;
   toCity: string;
   neighborhood: string;
   orderDetails: OrderDetailsDataType[];

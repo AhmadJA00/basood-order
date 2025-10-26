@@ -1,6 +1,8 @@
 import type { gloabResponseType } from "../../../gloabal.type";
+import type { CityDataType } from "../../Cities/city.type";
+import type { DriverDataType } from "../../Drivers/driver.type";
+import type { NeighborhoodResDataType } from "../../Neighborhoods/neighborhood.type";
 import type { SupplierResDataType } from "../../Suppliers/supplier.type";
-import type { OrderResDataType } from "../order.type";
 
 export type OrderDetailsResType = gloabResponseType<OrderDetailsDataType>;
 
@@ -8,15 +10,16 @@ export type OrderDetailsDataType = {
   id: string;
   address: string;
   branchId: number;
-  deliveryAmount: number;
-  driverAmount: number;
+  deliveryPrice: number;
+  driverPrice: number;
   invoiceNo: string;
-  isAmountChanged: boolean;
-  oldProductAmount: number;
+  driver: DriverDataType;
+  isPriceChanged: boolean;
+  oldProductPrice: number;
   orderId: string;
-  order: OrderResDataType;
-
-  productAmount: number;
+  toCity: CityDataType;
+  neighborhood: NeighborhoodResDataType;
+  productPrice: number;
   productName?: string;
   receiverNumberPhone: string;
   remark: string;

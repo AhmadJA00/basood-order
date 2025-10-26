@@ -94,15 +94,15 @@ export default function List() {
         return (
           <Flex align="center" justify="space-between" gap={"middle"}>
             <p>
-              {row?.order?.driver?.firstName} {row?.order?.driver?.middleName}{" "}
-              {row?.order?.driver?.lastName}
+              {row?.driver?.firstName} {row?.driver?.middleName}{" "}
+              {row?.driver?.lastName}
             </p>
             <Tooltip title={t(`knowSupplier`)} color="#003049">
               <Button
                 type="primary"
                 onClick={() => {
                   setOpenDriverInfoModal(true);
-                  setCurrentDrivers(row?.order?.driver);
+                  setCurrentDrivers(row?.driver);
                 }}
               >
                 <MdDeliveryDining />
@@ -118,31 +118,29 @@ export default function List() {
       render: (row: OrderDetailsDataType) => helpers.getStatus(row?.status),
     },
     {
-      title: t("productAmount"),
-      key: "productAmount",
+      title: t("productPrice"),
+      key: "productPrice",
       render: (row: OrderDetailsDataType) =>
-        ` ${(row?.productAmount || 0)?.toLocaleString()} ${t("iqd")}`,
+        ` ${(row?.productPrice || 0)?.toLocaleString()} ${t("iqd")}`,
     },
     {
-      title: t("deliveryAmount"),
-      key: "deliveryAmount",
+      title: t("deliveryPrice"),
+      key: "deliveryPrice",
       render: (row: OrderDetailsDataType) =>
-        ` ${(row?.deliveryAmount || 0)?.toLocaleString()} ${t("iqd")}`,
+        ` ${(row?.deliveryPrice || 0)?.toLocaleString()} ${t("iqd")}`,
     },
     {
-      title: t("driverAmount"),
-      key: "driverAmount",
+      title: t("driverPrice"),
+      key: "driverPrice",
       render: (row: OrderDetailsDataType) =>
-        ` ${(row?.driverAmount || 0)?.toLocaleString()} ${t("iqd")}`,
+        ` ${(row?.driverPrice || 0)?.toLocaleString()} ${t("iqd")}`,
     },
     {
       title: `${t("fromCity")} -> ${t("toCity")} (${t("neighborhood")})`,
       key: "fromCity",
       render: (row: OrderDetailsDataType) => (
-        <p>{`${row?.order?.from.name} -> ${row?.order?.to.name} ${
-          row?.order?.neighborhood?.name
-            ? `(${row?.order?.neighborhood?.name})`
-            : ""
+        <p>{`${row?.toCity.name} ${
+          row?.neighborhood?.name ? `(${row?.neighborhood?.name})` : ""
         }`}</p>
       ),
     },
@@ -364,11 +362,10 @@ export default function List() {
               ) {
                 const printData: OrderDriverContentPrintProps = {
                   orderDetails: data.items,
-                  driver: `${data.items[0].order.driver.firstName} ${data.items[0].order.driver.middleName} ${data.items[0].order.driver.lastName}`,
-                  driverId: data.items[0].order.driver.id,
-                  fromCity: data.items[0].order.from.name,
-                  toCity: data.items[0].order.to.name,
-                  neighborhood: data.items[0].order.neighborhood?.name ?? null,
+                  driver: `${data.items[0].driver.firstName} ${data.items[0].driver.middleName} ${data.items[0].driver.lastName}`,
+                  driverId: data.items[0].driver.id,
+                  toCity: data.items[0].toCity.name,
+                  neighborhood: data.items[0].neighborhood?.name ?? null,
                   fromDate: searchParams.get("fromDate")!,
                   toDate: searchParams.get("toDate")!,
                 };
