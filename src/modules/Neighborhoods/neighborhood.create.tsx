@@ -1,11 +1,11 @@
 import { Form, type FormProps } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useParams, useRevalidator } from "react-router";
-import { postZone, putZone } from "./zone.api";
+import { useLoaderData, useNavigate, useParams } from "react-router";
+import { postNeighborhood, putNeighborhood } from "./neighborhood.api";
 import CInput from "../../components/CInput";
 import FormWrapper from "../../components/FormWrapper";
-import type { ZoneDataType } from "./zone.type";
+import type { NeighborhoodDataType } from "./neighborhood.type";
 import CSelect from "../../components/CSelect";
 import type { CityDataType, CityResType } from "../Cities/city.type";
 import { getCity } from "../Cities/city.api";
@@ -15,26 +15,27 @@ import helpers from "../../helpers";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const revalidator = useRevalidator();
   const { openNotification } = useNotification();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
-  const data = useLoaderData() as ZoneDataType;
+  const data = useLoaderData() as NeighborhoodDataType;
   const [cities, setCities] = React.useState<CityResType | null>(null);
 
-  const onFinish: FormProps<ZoneDataType>["onFinish"] = async (
-    formData: ZoneDataType
+  const onFinish: FormProps<NeighborhoodDataType>["onFinish"] = async (
+    formData: NeighborhoodDataType
   ) => {
     try {
       setIsLoading(true);
       if (id) {
-        await putZone<ZoneDataType>(formData, id);
-        revalidator.revalidate();
+        await putNeighborhood<NeighborhoodDataType>(formData, id);
+        openNotification("success", t("updatedSuccessfully"));
       } else {
-        await postZone<ZoneDataType>(formData);
+        await postNeighborhood<NeighborhoodDataType>(formData);
+        openNotification("success", t("createdSuccessfully"));
       }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {
@@ -69,14 +70,14 @@ const Create = () => {
     };
   }, []);
 
-  const onFinishFailed: FormProps<ZoneDataType>["onFinishFailed"] = (
+  const onFinishFailed: FormProps<NeighborhoodDataType>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.error("Failed:", errorInfo);
   };
 
   return (
-    <FormWrapper<ZoneDataType>
+    <FormWrapper<NeighborhoodDataType>
       title={id ? t("update") : t("create")}
       form={form}
       onFinish={onFinish}
@@ -84,7 +85,7 @@ const Create = () => {
       initialValues={data}
       isLoading={isLoading}
     >
-      <CSelect<ZoneDataType>
+      <CSelect<NeighborhoodDataType>
         name="cityId"
         label={t("selectCity")}
         placeholder={t("selectCity")}
@@ -99,12 +100,15 @@ const Create = () => {
           form.setFieldValue("accountId", value);
         }}
       />
-      <CInput<ZoneDataType>
+      <CInput<NeighborhoodDataType>
         name="name"
         label={t("name")}
         rules={[{ required: true, message: t("requiredField") }]}
       />
-      <CInput<ZoneDataType> name="description" label={t("description")} />
+      <CInput<NeighborhoodDataType>
+        name="description"
+        label={t("description")}
+      />
     </FormWrapper>
   );
 };

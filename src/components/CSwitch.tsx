@@ -3,6 +3,7 @@ import { Form, Switch } from "antd";
 import type { Rule } from "antd/es/form";
 import type { InputName } from "../gloabal.type";
 import type { SwitchChangeEventHandler } from "antd/es/switch";
+import { useLocation } from "react-router";
 
 interface InputProps<T extends object> {
   rules?: Rule[];
@@ -29,6 +30,8 @@ const CSwitch = <T extends object>({
   checkedChildren,
   unCheckedChildren,
 }: InputProps<T>) => {
+  const { pathname } = useLocation();
+  const isShow = pathname.includes("show");
   return (
     <Form.Item<T>
       name={name as any}
@@ -42,7 +45,7 @@ const CSwitch = <T extends object>({
     >
       <Switch
         onChange={onChange}
-        disabled={disabled}
+        disabled={isShow || disabled}
         checked={checked}
         defaultChecked={defaultChecked}
         checkedChildren={checkedChildren}

@@ -6,7 +6,7 @@ export type OrderPendingDataType = {
   driverId: number;
   fromId: number;
   toId: number;
-  zoneId: number;
+  neighborhoodId: number;
   description: string;
   paymentTerm: "loan" | "prePaid";
   safeId: number;

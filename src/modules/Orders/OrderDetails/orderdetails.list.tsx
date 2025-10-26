@@ -136,11 +136,13 @@ export default function List() {
         ` ${(row?.driverAmount || 0)?.toLocaleString()} ${t("iqd")}`,
     },
     {
-      title: `${t("fromCity")} -> ${t("toCity")} (${t("zone")})`,
+      title: `${t("fromCity")} -> ${t("toCity")} (${t("neighborhood")})`,
       key: "fromCity",
       render: (row: OrderDetailsDataType) => (
         <p>{`${row?.order?.from.name} -> ${row?.order?.to.name} ${
-          row?.order?.zone?.name ? `(${row?.order?.zone?.name})` : ""
+          row?.order?.neighborhood?.name
+            ? `(${row?.order?.neighborhood?.name})`
+            : ""
         }`}</p>
       ),
     },
@@ -366,7 +368,7 @@ export default function List() {
                   driverId: data.items[0].order.driver.id,
                   fromCity: data.items[0].order.from.name,
                   toCity: data.items[0].order.to.name,
-                  zone: data.items[0].order.zone?.name ?? null,
+                  neighborhood: data.items[0].order.neighborhood?.name ?? null,
                   fromDate: searchParams.get("fromDate")!,
                   toDate: searchParams.get("toDate")!,
                 };

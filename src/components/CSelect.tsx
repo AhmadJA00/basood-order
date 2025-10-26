@@ -3,6 +3,7 @@ import { Form, Select } from "antd";
 import type { Rule } from "antd/es/form";
 import type { SelectProps as AntSelectProps } from "antd";
 import type { InputName } from "../gloabal.type";
+import { useLocation } from "react-router";
 
 interface SelectProps<T extends object> {
   rules?: Rule[];
@@ -41,6 +42,8 @@ const CSelect = <T extends object>({
   allowClear = true,
   multiple = false,
 }: SelectProps<T>) => {
+  const { pathname } = useLocation();
+  const isShow = pathname.includes("show");
   return (
     <Form.Item<T>
       name={name as any}
@@ -58,7 +61,7 @@ const CSelect = <T extends object>({
         optionFilterProp={optionFilterProp}
         options={options}
         placeholder={placeholder || label}
-        disabled={disabled}
+        disabled={isShow || disabled}
         onChange={onChange}
         allowClear={allowClear}
         onBlur={onBlur}

@@ -2,7 +2,7 @@ import { Flex, Form, type FormProps } from "antd";
 import type { DriverDataType } from "./driver.type";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useParams, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import { postDriver, putDriver } from "./driver.api";
 import CInput from "../../components/CInput";
 import FormWrapper from "../../components/FormWrapper";
@@ -15,8 +15,8 @@ import useNotification from "../../hooks/useNotification";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const revalidator = useRevalidator();
   const { openNotification } = useNotification();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
@@ -29,11 +29,12 @@ const Create = () => {
       setIsLoading(true);
       if (id) {
         await putDriver<DriverDataType>(formData, id);
-        revalidator.revalidate();
+        openNotification("success", t("updatedSuccessfully"));
       } else {
         await postDriver<DriverDataType>(formData);
+        openNotification("success", t("createdSuccessfully"));
       }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

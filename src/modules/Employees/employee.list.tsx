@@ -91,7 +91,7 @@ export default function Employees() {
       setIsLoading(true);
       await putSalary<SalaryFormUpdateType>(formData, currentEmploye?.id || "");
       revalidator.revalidate();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

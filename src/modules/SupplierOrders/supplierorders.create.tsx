@@ -29,7 +29,7 @@ const Create = () => {
       } else {
         await postSupplierOrder<SupplierOrderDataType>(formData);
       }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

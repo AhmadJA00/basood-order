@@ -1,7 +1,7 @@
 import { Form, type FormProps } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useParams, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import { postSupplier, putSupplier } from "./supplier.api";
 import CInput from "../../components/CInput";
 import FormWrapper from "../../components/FormWrapper";
@@ -13,10 +13,11 @@ import useNotification from "../../hooks/useNotification";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const revalidator = useRevalidator();
   const [isLoading, setIsLoading] = React.useState(false);
   const { id } = useParams();
   const data = useLoaderData();
+  const navigate = useNavigate();
+
   const { openNotification } = useNotification();
 
   const onFinish: FormProps<SupplierDataType>["onFinish"] = async (
@@ -26,11 +27,12 @@ const Create = () => {
       setIsLoading(true);
       if (id) {
         await putSupplier<SupplierDataType>(formData, id);
-        revalidator.revalidate();
+        openNotification("success", t("updatedSuccessfully"));
       } else {
         await postSupplier<SupplierDataType>(formData);
+        openNotification("success", t("createdSuccessfully"));
       }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {

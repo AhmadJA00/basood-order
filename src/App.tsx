@@ -67,9 +67,13 @@ const TransfersCreate = React.lazy(
 );
 import { loader as transfersLoader } from "./modules/Transfers/transfer.api.ts";
 
-const ZonesList = React.lazy(() => import("./modules/Zones/zone.list.tsx"));
-const ZonesCreate = React.lazy(() => import("./modules/Zones/zone.create.tsx"));
-import { loader as zonesLoader } from "./modules/Zones/zone.api.ts";
+const NeighborhoodsList = React.lazy(
+  () => import("./modules/Neighborhoods/neighborhood.list.tsx")
+);
+const NeighborhoodsCreate = React.lazy(
+  () => import("./modules/Neighborhoods/neighborhood.create.tsx")
+);
+import { loader as neighborhoodsLoader } from "./modules/Neighborhoods/neighborhood.api.ts";
 
 const DriversList = React.lazy(
   () => import("./modules/Drivers/driver.list.tsx")
@@ -86,6 +90,12 @@ const TransactionsCreate = React.lazy(
   () => import("./modules/Drivers/Transactions/transaction.create.tsx")
 );
 import { loader as transactionsLoader } from "./modules/Drivers/Transactions/transaction.api.ts";
+
+const DriverOrdersList = React.lazy(
+  () => import("./modules/Drivers/DriverOrders/driverorder.list.tsx")
+);
+
+import { loader as DriverOrdersLoader } from "./modules/Drivers/DriverOrders/driverorder.api.ts";
 
 const EmployeesList = React.lazy(
   () => import("./modules/Employees/employee.list.tsx")
@@ -169,6 +179,13 @@ const routes = createBrowserRouter(
             element={<RenderRoute element={<DriversCreate />} />}
             loader={driversLoader}
           />
+          <Route path="orders">
+            <Route
+              index
+              element={<RenderRoute element={<DriverOrdersList />} />}
+              loader={DriverOrdersLoader}
+            />
+          </Route>
           <Route path="transactions">
             <Route
               index
@@ -214,6 +231,11 @@ const routes = createBrowserRouter(
           />
           <Route
             path="edit/:id"
+            element={<RenderRoute element={<OrdersCreate />} />}
+            loader={ordersLoader}
+          />
+          <Route
+            path="show/:id"
             element={<RenderRoute element={<OrdersCreate />} />}
             loader={ordersLoader}
           />
@@ -327,20 +349,20 @@ const routes = createBrowserRouter(
             />
           </Route>
         </Route>
-        <Route path="zones">
+        <Route path="neighborhoods">
           <Route
             index
-            element={<RenderRoute element={<ZonesList />} />}
-            loader={zonesLoader}
+            element={<RenderRoute element={<NeighborhoodsList />} />}
+            loader={neighborhoodsLoader}
           />
           <Route
             path="create"
-            element={<RenderRoute element={<ZonesCreate />} />}
+            element={<RenderRoute element={<NeighborhoodsCreate />} />}
           />
           <Route
             path="edit/:id"
-            element={<RenderRoute element={<ZonesCreate />} />}
-            loader={zonesLoader}
+            element={<RenderRoute element={<NeighborhoodsCreate />} />}
+            loader={neighborhoodsLoader}
           />
         </Route>
         <Route path="employees">

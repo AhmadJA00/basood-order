@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, InputNumber } from "antd";
 import type { Rule } from "antd/es/form";
 import type { InputName } from "../gloabal.type";
+import { useLocation } from "react-router";
 
 interface InputProps<T extends object> {
   rules?: Rule[];
@@ -68,6 +69,8 @@ const CInput = <T extends object>({
     ? InputNumber
     : Input;
 
+  const { pathname } = useLocation();
+  const isShow = pathname.includes("show");
   // Handle onChange for different input types
   const handleChange = (
     e:
@@ -109,7 +112,7 @@ const CInput = <T extends object>({
         <InputNumber
           name={String(name)}
           value={value as number}
-          disabled={disabled}
+          disabled={isShow || disabled}
           onChange={handleNumberChange}
           onBlur={onBlur}
           onKeyDown={onKeyDown}

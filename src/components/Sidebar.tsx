@@ -69,6 +69,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "transactions":
         navigate("drivers/transactions");
         break;
+      case "driverorders":
+        navigate("drivers/orders");
+        break;
       case "safes":
         navigate("accountant/safes");
         break;
@@ -78,8 +81,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       case "transfers":
         navigate("accountant/transfers");
         break;
-      case "zones":
-        navigate("zones");
+      case "neighborhoods":
+        navigate("neighborhoods");
         break;
       case "employees":
         navigate("employees");
@@ -101,10 +104,10 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: "branches",
       label: t("branches"),
       icon: <FaCodeBranch />,
-      allowed: currentUser?.userType === "admin", // Example: Always allowed
+      allowed: currentUser?.userType === "admin",
     },
     {
-      key: "orders-group", // Changed key to avoid conflict with child 'orders' key
+      key: "orders-group",
       label: t("orders"),
       icon: <MdWork />,
       allowed: currentUser?.userType === "admin",
@@ -113,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           key: "orders",
           label: t("orders"),
           icon: <MdWork />,
-          allowed: currentUser?.userType === "admin", // Example: Always allowed
+          allowed: currentUser?.userType === "admin",
         },
         {
           key: "supplierOrders",
@@ -157,6 +160,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           label: t("drivers"),
           icon: <MdWork />,
           allowed: currentUser?.userType === "admin",
+        },
+        {
+          key: "driverorders",
+          label: t("orders"),
+          icon: <MdWork />,
+          allowed: currentUser?.userType === "driver",
         },
         {
           key: "transactions",
@@ -219,8 +228,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       allowed: currentUser?.userType === "admin",
     },
     {
-      key: "zones",
-      label: t("zones"),
+      key: "neighborhoods",
+      label: t("neighborhoods"),
       icon: <MdWork />,
       allowed: currentUser?.userType === "admin",
     },

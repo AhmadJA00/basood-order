@@ -17,7 +17,7 @@ export default function ErrorEle() {
     };
     catchUnauthorized();
   }, [pathname]);
-
+  console.log(routeError);
   return (
     <section className="d-flex flex-column gap-4 justify-content-center align-items-center h-full">
       <div className="w-full m-20 shadow">

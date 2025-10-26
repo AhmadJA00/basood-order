@@ -202,5 +202,9 @@ const helpers = {
     { value: 1, label: "SendByDriver" },
     { value: 2, label: "ReceivedAtOffice" },
   ],
+  productChange: [
+    { value: 1, label: "changed" },
+    { value: 2, label: "partChanged" },
+  ],
 };
 export default helpers;

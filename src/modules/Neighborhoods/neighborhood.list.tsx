@@ -2,14 +2,17 @@ import { useLoaderData, useNavigation, useRevalidator } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import DataGrid from "../../components/DataGrid";
 import Actions, { DeleteButton } from "../../components/Actions";
-import { deleteZone } from "./zone.api";
+import { deleteNeighborhood } from "./neighborhood.api";
 import type { ColumnsType } from "../../gloabal.type";
-import type { ZoneResDataType, ZoneResType } from "./zone.type";
+import type {
+  NeighborhoodResDataType,
+  NeighborhoodResType,
+} from "./neighborhood.type";
 import helpers from "../../helpers";
 import useNotification from "../../hooks/useNotification";
 
 export default function List() {
-  const data = useLoaderData() as ZoneResType;
+  const data = useLoaderData() as NeighborhoodResType;
   const revalidator = useRevalidator();
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -18,7 +21,7 @@ export default function List() {
   const deleteFunction = async (id: string) => {
     try {
       if (id) {
-        await deleteZone(id);
+        await deleteNeighborhood(id);
         revalidator.revalidate();
       }
     } catch (error) {
@@ -36,24 +39,24 @@ export default function List() {
       title: t("name"),
       key: "name",
       sorter: true,
-      render: (row: ZoneResDataType) => row.name,
+      render: (row: NeighborhoodResDataType) => row.name,
     },
     {
       title: t("city"),
       key: "city",
       sorter: true,
-      render: (row: ZoneResDataType) => row?.city?.name,
+      render: (row: NeighborhoodResDataType) => row?.city?.name,
     },
     {
       title: t("description"),
       key: "description",
       sorter: true,
-      render: (row: ZoneResDataType) => row?.description || "-",
+      render: (row: NeighborhoodResDataType) => row?.description || "-",
     },
     {
       title: t("action"),
       key: "action",
-      render: (row: ZoneResDataType) => {
+      render: (row: NeighborhoodResDataType) => {
         return (
           <div className="flex gap-2">
             <Actions id={row.id} hasShow={false} hasEdit />
@@ -62,12 +65,12 @@ export default function List() {
         );
       },
     },
-  ] as ColumnsType<ZoneResDataType>[];
+  ] as ColumnsType<NeighborhoodResDataType>[];
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 text-primary font-semibold">
-      <DataGrid<ZoneResDataType>
-        title={t("zones")}
+      <DataGrid<NeighborhoodResDataType>
+        title={t("neighborhoods")}
         columns={columns}
         data={data}
         loading={

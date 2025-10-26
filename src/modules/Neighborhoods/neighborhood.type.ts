@@ -1,15 +1,15 @@
 import type { gloabResponseType } from "../../gloabal.type";
 import type { CityDataType } from "../Cities/city.type";
 
-export type ZoneResType = gloabResponseType<ZoneResDataType>;
+export type NeighborhoodResType = gloabResponseType<NeighborhoodResDataType>;
 
-export type ZoneDataType = {
+export type NeighborhoodDataType = {
   id: string;
   name: string;
   description?: string;
   cityId: string;
 };
-export type ZoneResDataType = {
+export type NeighborhoodResDataType = {
   id: string;
   name: string;
   description?: string;

@@ -105,6 +105,7 @@ const Login: React.FC = () => {
     <div className="w-screen h-screen bg-gradient-to-br  from-primary-light to-primary ">
       <div className="max-w-lg mx-auto min-h-screen flex flex-col justify-center">
         <FormWrapper
+          hasNoBackButton
           title={t("login")}
           form={form}
           onFinish={onFinish}

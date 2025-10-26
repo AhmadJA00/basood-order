@@ -4,11 +4,15 @@ import helpers from "../../helpers";
 import axios from "axios";
 import type { LoaderGetFuncType } from "../../gloabal.type";
 
-export async function getZone({ queryOBJ, id, signal }: LoaderGetFuncType) {
+export async function getNeighborhood({
+  queryOBJ,
+  id,
+  signal,
+}: LoaderGetFuncType) {
   const urlSearchParams = queryOBJ ? helpers.queryValidation(queryOBJ) : {};
-  let url = "/Zone?";
+  let url = "/Neighborhood?";
   if (id) {
-    url = `/Zone/${id}`;
+    url = `/Neighborhood/${id}`;
   }
   url = url.concat(urlSearchParams.toString());
 
@@ -22,8 +26,11 @@ export async function getZone({ queryOBJ, id, signal }: LoaderGetFuncType) {
     throw error;
   }
 }
-export async function getZoneByCityId({ id, signal }: LoaderGetFuncType) {
-  const url = `/Zone/getByCityId/${id}`;
+export async function getNeighborhoodByCityId({
+  id,
+  signal,
+}: LoaderGetFuncType) {
+  const url = `/Neighborhood/getByCityId/${id}`;
 
   try {
     const response = await HTTP.get(url, { signal });
@@ -36,21 +43,21 @@ export async function getZoneByCityId({ id, signal }: LoaderGetFuncType) {
   }
 }
 
-export async function postZone<T>(data: T) {
+export async function postNeighborhood<T>(data: T) {
   {
-    const request = await HTTP.post("/Zone", data);
+    const request = await HTTP.post("/Neighborhood", data);
     return request;
   }
 }
-export async function putZone<T>(data: T, id: string) {
+export async function putNeighborhood<T>(data: T, id: string) {
   {
-    const request = await HTTP.put(`/Zone/${id}`, data);
+    const request = await HTTP.put(`/Neighborhood/${id}`, data);
     return request;
   }
 }
-export async function deleteZone(id: string) {
+export async function deleteNeighborhood(id: string) {
   {
-    const request = await HTTP.delete(`/Zone/togglerDelete/${id}`);
+    const request = await HTTP.delete(`/Neighborhood/togglerDelete/${id}`);
     return request;
   }
 }
@@ -62,7 +69,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const isAscending = url.searchParams.get("isAscending") || "";
   const search = url.searchParams.get("search") || "";
 
-  return await getZone({
+  return await getNeighborhood({
     queryOBJ: {
       pageSize,
       currentPage,

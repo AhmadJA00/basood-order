@@ -19,13 +19,6 @@ export default function AdminLayout() {
     if (!userAuth.userLoggedIn && pathname !== "/login") {
       navgiate(`/login?prevRouter=${pathname}`);
     }
-    if (
-      (userAuth.currentUser?.userType === "supplier" ||
-        userAuth.currentUser?.userType === "driver") &&
-      !pathname.includes("supplierOrders")
-    ) {
-      navgiate("/supplierOrders");
-    }
   }, [userAuth.userLoggedIn, pathname]);
 
   if (!userAuth.userLoggedIn) {

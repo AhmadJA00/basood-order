@@ -11,11 +11,11 @@ import type {
 import type { SafeResDataType, SafeResType } from "../../Safes/safe.type";
 import type { CustomerDriverDataType } from "../../Drivers/driver.type";
 import type { CityDataType, CityResType } from "../../Cities/city.type";
-import type { ZoneDataType } from "../../Zones/zone.type";
+import type { NeighborhoodDataType } from "../../Neighborhoods/neighborhood.type";
 import { getSafe } from "../../Safes/safe.api";
 import { getCustomerDriver } from "../../Drivers/driver.api";
 import { getCity } from "../../Cities/city.api";
-import { getZoneByCityId } from "../../Zones/zone.api";
+import { getNeighborhoodByCityId } from "../../Neighborhoods/neighborhood.api";
 import { useWatch } from "antd/es/form/Form";
 import CSelect from "../../../components/CSelect";
 import helpers from "../../../helpers";
@@ -40,7 +40,9 @@ const Create = () => {
     null
   );
   const [cities, setCities] = React.useState<CityResType | null>(null);
-  const [zones, setZones] = React.useState<ZoneDataType[] | null>(null);
+  const [neighborhoods, setNeighborhoods] = React.useState<
+    NeighborhoodDataType[] | null
+  >(null);
 
   const fromId = useWatch(["fromId"], form);
   const toId = useWatch(["toId"], form);
@@ -103,7 +105,7 @@ const Create = () => {
         ...formData,
         orderDetails: orders,
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("../");
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
       if (errors.length > 0) {
@@ -151,10 +153,10 @@ const Create = () => {
       }
     }
   };
-  const fetchZones = async (signal: AbortSignal) => {
+  const fetchNeighborhoods = async (signal: AbortSignal) => {
     try {
       if (toId) {
-        setZones(await getZoneByCityId({ id: toId, signal }));
+        setNeighborhoods(await getNeighborhoodByCityId({ id: toId, signal }));
       }
     } catch (error) {
       const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
@@ -176,7 +178,7 @@ const Create = () => {
 
   React.useEffect(() => {
     const abortController = new AbortController();
-    fetchZones(abortController.signal);
+    fetchNeighborhoods(abortController.signal);
     return () => {
       abortController.abort();
     };
@@ -219,14 +221,14 @@ const Create = () => {
             }
           />
           <CSelect<OrderPendingDataType>
-            name="zoneId"
+            name="neighborhoodId"
             className="flex-1"
-            label={t("zones")}
+            label={t("neighborhoods")}
             placeholder={t("select")}
             options={
-              zones?.map((zone: ZoneDataType) => ({
-                label: t(zone.name),
-                value: zone.id,
+              neighborhoods?.map((neighborhood: NeighborhoodDataType) => ({
+                label: t(neighborhood.name),
+                value: neighborhood.id,
               })) || []
             }
           />

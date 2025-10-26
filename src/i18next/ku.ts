@@ -1212,7 +1212,7 @@ const ku = {
     expensives: "خەرجیەکان",
     suppliers: "دابینکەرەکان",
     cities: "شارەکان",
-    zones: "ناوچەکان",
+    neighborhoods: "ناوچەکان",
     action: "کردارەکان",
 
     from: "لە",

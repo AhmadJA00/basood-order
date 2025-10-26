@@ -6,14 +6,14 @@ import type { OrderDetailsDataType } from "../modules/Orders/OrderDetails/orderd
 
 export interface OrderDriverContentPrintProps {
   // id: string;
-  driver: string ;
-  driverId: number | string ;
-  fromCity: string ;
-  toCity: string ;
-  zone: string ;
-  orderDetails: OrderDetailsDataType[] ,
-  fromDate : string,
-  toDate : string,
+  driver: string;
+  driverId: number | string;
+  fromCity: string;
+  toCity: string;
+  neighborhood: string;
+  orderDetails: OrderDetailsDataType[];
+  fromDate: string;
+  toDate: string;
 }
 
 const styles = StyleSheet.create({
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   total: {
     padding: 10,
-    paddingTop : 0,
+    paddingTop: 0,
     textAlign: "right",
     fontSize: 11,
     fontWeight: "bold",
@@ -106,7 +106,7 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
     const [qrCodeDataURL, setQrCodeDataURL] = React.useState<string>("");
 
     React.useEffect(() => {
-          const qrText = `driverId:${id}&fromDate:${data.fromDate}&toDate:${data.toDate}`;
+      const qrText = `driverId:${id}&fromDate:${data.fromDate}&toDate:${data.toDate}`;
 
       QRCode.toDataURL(qrText, { margin: 1, width: 120 })
         .then(setQrCodeDataURL)
@@ -144,57 +144,60 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
 
   return (
     <View>
-      <View style={{  display : "flex" , flexDirection : "column" }}>
-        <View style={{ ...styles.box1  ,     paddingTop: 0,}}>
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: "bold",
-            fontFamily: "Rabar_022",
-            textAlign : "center",
-            width: "100%",
-          }}>
-         {data.toDate} {"-"} {data.fromDate}
-        </Text>
-      </View>
+      <View style={{ display: "flex", flexDirection: "column" }}>
+        <View style={{ ...styles.box1, paddingTop: 0 }}>
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: "bold",
+              fontFamily: "Rabar_022",
+              textAlign: "center",
+              width: "100%",
+            }}
+          >
+            {data.toDate} {"-"} {data.fromDate}
+          </Text>
+        </View>
 
-              <View style={{ ...styles.box1, marginBottom: 5 }}>
-        <DriverQRCode id={data.driverId!} />
-        { data.zone &&
-<Text
-          style={{
-            fontSize: 11,
-            fontWeight: "bold",
-            fontFamily: "Rabar_022",
-            width: "33.33%",
-          }}>
-          ناوچە : {data.zone}
-        </Text>
+        <View style={{ ...styles.box1, marginBottom: 5 }}>
+          <DriverQRCode id={data.driverId!} />
+          {data.neighborhood && (
+            <Text
+              style={{
+                fontSize: 11,
+                fontWeight: "bold",
+                fontFamily: "Rabar_022",
+                width: "33.33%",
+              }}
+            >
+              ناوچە : {data.neighborhood}
+            </Text>
+          )}
 
-        }
-       
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: "bold",
+              fontFamily: "Rabar_022",
+              width: "33.34%",
+              textAlign: "center",
+            }}
+          >
+            گەیاندنی بۆ {data.toCity}
+          </Text>
 
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: "bold",
-            fontFamily: "Rabar_022",
-            width : "33.34%" ,
-            textAlign : "center"
-          }}>
-          گەیاندنی  بۆ {data.toCity}
-        </Text>
-
-        <Text
-          style={{ fontSize: 11, fontWeight: "bold", fontFamily: "Rabar_022"
-            , width : "33.33%"
-            , textAlign : "right"
-
-           }}>
-          ناوی شۆفێر : {data.driver}
-        </Text>
-      </View>
-
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: "bold",
+              fontFamily: "Rabar_022",
+              width: "33.33%",
+              textAlign: "right",
+            }}
+          >
+            ناوی شۆفێر : {data.driver}
+          </Text>
+        </View>
       </View>
       <View style={styles.table}>
         <View style={styles.headerRow}>
@@ -224,19 +227,23 @@ const DriverOrderContent = (data: OrderDriverContentPrintProps) => {
               ...styles.row,
               backgroundColor: index % 2 === 0 ? "#ffffff" : "#f7f7f7",
             }}
-            key={index}>
+            key={index}
+          >
             <View
               style={{
                 width: 25,
                 height: 25,
                 padding: 0,
-              }}>
+              }}
+            >
               <Text style={{ ...styles.cell, width: 25 }}>{index + 1}</Text>
             </View>
             <Text style={styles.cell}>{item.supplier.name}</Text>
             <Text style={styles.cell}>{item.supplier.primaryPhone}</Text>
 
-            <Text style={styles.cell}>{(item.productAmount + item.deliveryAmount).toFixed(2)}</Text>
+            <Text style={styles.cell}>
+              {(item.productAmount + item.deliveryAmount).toFixed(2)}
+            </Text>
             {/* <Text style={styles.cell}>{item.deliveryAmount.toFixed(2)}</Text> */}
             <Text style={styles.cell}>{item.driverAmount.toFixed(2)}</Text>
             {/* <Text
