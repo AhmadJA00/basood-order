@@ -80,16 +80,27 @@ const Login: React.FC = () => {
 
         HTTP.defaults.headers.common["Branch"] = res.data?.branchId || null;
 
+        if (res.data.user.userType === 3) {
+          navigate("/supplier-side");
+          return;
+        }
+
         navigate(
           new URLSearchParams(window.location.search).get("prevRouter") || "/"
         );
       }
     } catch (error) {
-      const errors = helpers.getErrorObjectKeyValue(error.response.data.errors);
-      if (errors.length > 0) {
-        errors.forEach((err) => {
-          openNotification("error", err.label, err.error as string);
-        });
+      if (error?.response?.data?.errors) {
+        const errors = helpers.getErrorObjectKeyValue(
+          error?.response?.data?.errors
+        );
+        if (errors.length > 0) {
+          errors.forEach((err) => {
+            openNotification("error", err.label, err.error as string);
+          });
+        }
+      } else {
+        openNotification("error", error.response.data.title);
       }
     } finally {
       setIsLoading(false);
@@ -102,7 +113,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-gradient-to-br  from-primary-light to-primary ">
+    <div className="w-screen h-screen bg-gradient-to-br p-3 from-primary-light to-primary ">
       <div className="max-w-lg mx-auto min-h-screen flex flex-col justify-center">
         <FormWrapper
           hasNoBackButton

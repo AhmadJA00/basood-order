@@ -47,7 +47,7 @@ const PhoneNumberInput = <T extends object>({
       name={name}
       disabled={disabled}
       label={label}
-      type="number"
+      type="phone"
       rules={[
         ...(rules || []),
         { required: required, message: t("pleaseEnterPhoneNumber") },

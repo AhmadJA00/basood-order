@@ -69,6 +69,7 @@ export type DataGridProps<T> = {
   };
   loading: boolean;
   className?: string;
+  size?: "small" | "middle" | "large";
 };
 export type ColumnsType<T> = {
   title: string;
@@ -134,7 +135,8 @@ export type OrderStatus =
   | "PartiallyPaymentProcessing" // 15
   | "CancelledSupplierReceived" // 16
   | "PartiallyCancelledSupplierReceived" // 17
-  | "Completed"; // 18
+  | "PartiallyCompleted" // 18
+  | "Completed"; // 19
 
 type NestedFieldError = {
   [index: string]: string;

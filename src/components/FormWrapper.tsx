@@ -46,6 +46,9 @@ const FormWrapper = <FieldType extends {} = any>({
           align="center"
           className="bg-gradient-to-br  from-primary-light from-40% to-primary !px-5"
         >
+          <p className="text-2xl py-3 text-center  bg-gradient-to-br  flex-1">
+            {title}
+          </p>
           {!hasNoBackButton && (
             <Button
               type="default"
@@ -53,9 +56,6 @@ const FormWrapper = <FieldType extends {} = any>({
               onClick={() => navigate("../")}
             />
           )}
-          <p className="text-2xl py-3 text-center  bg-gradient-to-br  flex-1">
-            {title}
-          </p>
         </Flex>
       }
       className="relative overflow-hidden shadow-lg"

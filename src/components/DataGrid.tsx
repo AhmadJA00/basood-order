@@ -12,6 +12,7 @@ const DataGrid = <T,>({
   data,
   loading,
   className,
+  size = "middle",
 }: DataGridProps<T>) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("currentPage")) || 1;
@@ -74,6 +75,7 @@ const DataGrid = <T,>({
         <Loading isLoading={loading} />
         <HeaderTable hasCreate={hasCreate}>{children}</HeaderTable>
         <Table
+          size={size}
           dataSource={data.items.map((data) => ({ key: data.id, ...data }))}
           columns={[
             {

@@ -3,19 +3,12 @@ import type { gloabResponseType } from "../../../gloabal.type";
 export type OrderPendingResType = gloabResponseType<OrderPendingDataType>;
 
 export type OrderPendingDataType = {
-  driverId: number;
-  fromId: number;
-  toId: number;
-  neighborhoodId: number;
-  description: string;
-  paymentTerm: "loan" | "prePaid";
-  safeId: number;
-  orderDetails: OrderPendingDetailsType[];
-};
-export type OrderPendingDetailsType = {
-  id: string;
-  deliveryAmount: number;
-  driverAmount: number;
-  productName?: string;
-  supplierName?: string;
+  driverId: string;
+  supplierId: string;
+  paymentTerm: 1 | 2;
+  safeId: string;
+  toCityId: string;
+  neighborhoodId: string;
+  deliveryPrice: number;
+  driverPrice: number;
 };

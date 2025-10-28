@@ -97,10 +97,10 @@ export default function SupplierOrderes() {
   }, []);
   const columns = [
     {
-      title: t("invoiceNo"),
-      key: "invoiceNo",
+      title: t("orderNo"),
+      key: "orderNo",
       sorter: true,
-      render: (row: SupplierOrderResDataType) => `${row.invoiceNo || ""}`,
+      render: (row: SupplierOrderResDataType) => `${row.orderNo || ""}`,
     },
     {
       title: t("supplier"),
@@ -135,17 +135,17 @@ export default function SupplierOrderes() {
       render: (row: SupplierOrderResDataType) => `${row.productName}`,
     },
     {
-      title: t("productAmount"),
-      key: "productAmount",
+      title: t("productPrice"),
+      key: "productPrice",
       sorter: true,
-      render: (row: SupplierOrderResDataType) => row?.productAmount || "-",
+      render: (row: SupplierOrderResDataType) => `${row?.productPrice?.toLocaleString()} ${t('iqd')}`  ,
     },
     {
-      title: t("receiverNumberPhone"),
-      key: "receiverNumberPhone",
+      title: t("receiverPrimaryNumber"),
+      key: "receiverPrimaryNumber",
       sorter: true,
       responsive:[userAuth.currentUser?.userType !=='driver' &&'sm'],
-      render: (row: SupplierOrderResDataType) => `${row?.receiverNumberPhone}`,
+      render: (row: SupplierOrderResDataType) => `${row?.receiverPrimaryNumber}`,
     },
     {
       title: t("address"),

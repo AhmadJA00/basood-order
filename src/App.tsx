@@ -142,6 +142,7 @@ import { loader as rolesLoader } from "./modules/Users/Roles/role.api.ts";
 import { useTranslation } from "react-i18next";
 import { NotificationProvider } from "./providers/NotificationProvider.tsx";
 import ErrorEle from "./components/ErrorEle.tsx";
+import { SupplierRoutes } from "./Supplier/SupplierRoute.tsx";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -414,6 +415,7 @@ const routes = createBrowserRouter(
           </Route>
         </Route>
       </Route>
+      {SupplierRoutes}
       <Route path="login" element={<RenderRoute element={<Login />} />} />
       <Route path="*" element={<NotFound backURL="/" />} />
     </Route>

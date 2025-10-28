@@ -71,7 +71,7 @@ export default function Orderes() {
       sorter: true,
       render: (row: OrderResDataType) => (
         <Flex justify="space-between" align="center" gap={"middle"}>
-          <p>{`${row?.driver.firstName} ${row?.driver.middleName} ${row?.driver.lastName} `}</p>
+          <p>{`${row?.driver?.firstName} ${row?.driver?.middleName} ${row?.driver?.lastName} `}</p>
           <Tooltip title={t(`knowDriver`)} color="#003049">
             <Button
               type="primary"
@@ -98,19 +98,19 @@ export default function Orderes() {
     },
 
     {
-      title: `${t("productPrice")} + ${t("deliveryPrice")} + ${t(
+      title: `${t("productPrice")} + ${t("deliveryPrice")} (${t(
         "driverPrice"
-      )} = ${t("totalOrder")}`,
+      )}) = ${t("totalOrder")}`,
       key: "deliveryPrice",
       render: (row: OrderResDataType) => (
         <p className="text-nowrap">
-          {`${row?.productPrice.toLocaleString()} ${t(
+          {`${row?.productPrice?.toLocaleString()} ${t(
             "iqd"
-          )} + ${row?.deliveryPrice.toLocaleString()} ${t(
+          )} + ${row?.deliveryPrice?.toLocaleString()} ${t(
             "iqd"
-          )} + ${row?.driverPrice.toLocaleString()} ${t(
+          )} (${row?.driverPrice?.toLocaleString()} ${t(
             "iqd"
-          )} = ${row?.totalOrder.toLocaleString()} ${t("iqd")}`}
+          )}) = ${row?.totalOrder?.toLocaleString()} ${t("iqd")}`}
         </p>
       ),
     },
