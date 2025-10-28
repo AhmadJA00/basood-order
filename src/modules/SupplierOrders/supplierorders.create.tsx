@@ -17,12 +17,14 @@ import { useWatch } from "antd/es/form/Form";
 import { getCity } from "../Cities/city.api";
 import { getNeighborhoodByCityId } from "../Neighborhoods/neighborhood.api";
 import CSwitch from "../../components/CSwitch";
+import QrScannerModal from "../../components/QrCodeModal";
 const Create = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const { openNotification } = useNotification();
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isQrCodeSet, setIsQrCodeSet] = React.useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const data = useLoaderData() as SupplierOrderDataType;
@@ -109,6 +111,20 @@ const Create = () => {
   }, [toCityId]);
 
   return (
+   <>
+
+   {!isQrCodeSet ?
+
+<QrScannerModal 
+
+onChange={(e)=>{
+  alert("Ahmed Please Implement setOrderNo here::" + e);
+  setIsQrCodeSet(true);
+}}
+
+/>
+   :
+
     <FormWrapper
       title={t("supplierOrders")}
       form={form}
@@ -159,9 +175,9 @@ const Create = () => {
         <CInput<SupplierOrderDataType>
           name={"orderNo"}
           label={t("orderNo")}
-          disabled={!!id}
+          disabled={true}
           className="flex-1"
-          type="number"
+          type="text"
         />
         <CSelect<SupplierOrderDataType>
           name="productChange"
@@ -221,6 +237,11 @@ const Create = () => {
         isTextArea
       />
     </FormWrapper>
+   
+   }
+   
+   
+   </>
   );
 };
 
